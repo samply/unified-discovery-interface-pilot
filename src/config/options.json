@@ -1,0 +1,138 @@
+{
+    "iconOptions": {
+        "deleteUrl": "delete_icon.svg",
+        "infoUrl": "info-circle-svgrepo-com.svg"
+    },
+    "siteMappings": {
+        "stockholm": "Stockholm",
+        "athens": "Athens",
+        "bucharest": "Bucharest",
+        "CafeVariome": "CafeVariome",
+        "EGA Cineca": "EGA Cineca",
+        "GDI Starter Kit, firewalled": "GDI Starter Kit, firewalled",
+        "GDI Starter Kit": "GDI Starter Kit",
+        "HD Cineca firewalled": "HD Cineca firewalled",
+        "HD Cineca": "HD Cineca",
+        "Molgenis mutations": "Molgenis mutations",
+        "Progenetix": "Progenetix",
+        "RDConnect playground": "RDConnect playground"
+    },
+    "chartOptions": {
+        "patients": {
+            "legendMapping": {
+                "hamburg": "Hamburg"
+            }
+        },
+        "gender": {
+            "legendMapping": {
+                "male": "Männlich",
+                "female": "Weiblich",
+                "unknown": "Unbekannt",
+                "other": "Divers"
+            }
+        },
+        "diagnosis": {
+            "hintText": [
+                "Bei Patienten mit mehreren onkologischen Diagnosen werden auch Einträge angezeigt, die ggfs. nicht den ausgewählten Suchkriterien entsprechen."
+            ]
+        },
+        "age_at_diagnosis": {
+            "hintText": [
+                "Bei Patienten mit mehreren Erstdiagnosen werden auch Einträge angezeigt, die ggfs. außerhalb der Suchkriterien liegen. "
+            ]
+        },
+        "75186-7": {
+            "hintText": [
+                "\"unbekannt\": kein Geburtsdatum oder Todesdatum bekannt."
+            ]
+        },
+        "therapy_of_tumor": {
+            "hintText": [
+                "Bei Patienten mit mehreren onkologischen Diagnosen werden auch Einträge angezeigt, die ggfs. nicht den ausgewählten Suchkriterien entsprechen."
+            ],
+            "aggregations": [
+                "medicationStatements"
+            ],
+            "tooltips": {
+                "medicationStatements": "Systemische Therapien"
+            }
+        },
+        "medicationStatements": {
+            "hintText": [
+                "Art der systemischen oder abwartenden Therapie (ADT Basisdatensatz Versionen 2014, 2021)"
+            ],
+            "tooltips": {
+                "SO": "Sonstiges"
+            }
+        },
+        "sample_kind": {
+            "hintText": [
+                "Verteilung der Probentypen die mit den identifizierten Patienten verbunden sind."
+            ],
+            "accumulatedValues": [
+                {
+                    "name": "ffpe-tissue",
+                    "values": [
+                        "tissue-ffpe",
+                        "tumor-tissue-ffpe",
+                        "normal-tissue-ffpe",
+                        "other-tissue-ffpe"
+                    ]
+                },
+                {
+                    "name": "frozen-tissue",
+                    "values": [
+                        "tissue-frozen",
+                        "tumor-tissue-frozen",
+                        "normal-tissue-frozen",
+                        "other-tissue-frozen"
+                    ]
+                }
+            ],
+            "tooltips": {
+                "derivative-other": "Derivat, Andere"
+            },
+            "legendMapping":{
+                "derivative-other": "Derivat, Andere"
+            }
+        }
+    },
+    "tableOptions": {
+        "headerData": [
+            {
+                "title": "Sites",
+                "dataKey": "site"
+            },
+            {
+                "title": "Variants",
+                "dataKey": "variants"
+            },
+            {
+                "title": "Cohorts",
+                "dataKey": "cohorts"
+            },
+            {
+                "title": "Runs",
+                "dataKey": "runs"
+            },
+            {
+                "title": "Datasets",
+                "dataKey": "datasets"
+            },
+            {
+                "title": "Analyses",
+                "dataKey": "analyses"
+            },
+            {
+                "title": "Individuals",
+                "dataKey": "individuals"
+            },
+            {
+                "title": "Biosamples",
+                "dataKey": "specimen"
+            }
+        ]
+    },
+    "spots": [
+        ]
+}
