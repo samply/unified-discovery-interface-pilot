@@ -2,8 +2,8 @@
 	import './app.css';
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
-	import Linker from "./Linker.svelte";
-	import AiSearchField from "./AiSearchField.svelte";
+	import Linker from './Linker.svelte';
+	import AiSearchField from './AiSearchField.svelte';
 
 	// If a results table cell contains "-1", it means that the cell is empty,
 	// so we replace it with "-". This is done inside the shadow DOM of the
@@ -85,7 +85,11 @@
 
 <header>
 	<div class="header-panel">
-		<img class="header-panel-image" src="../assets/images/BBMRI-Logo-Slim.png" alt="UDI" />
+		<img
+			class="header-panel-image"
+			src="../assets/images/BBMRI-Logo-Slim.png"
+			alt="UDI"
+		/>
 		<p class="header-panel-text">Unified Discovery Interface</p>
 	</div>
 </header>
@@ -95,7 +99,10 @@
 		<div class="search-wrapper">
 			<div>
 				<AiSearchField />
-				<lens-search-bar noMatchesFoundMessage="{'No information found'}" placeholderText="{'Culumulative query'}"></lens-search-bar>
+				<lens-search-bar
+					noMatchesFoundMessage="{'No information found'}"
+					placeholderText="{'Culumulative query'}"
+				></lens-search-bar>
 			</div>
 			<div class="button-container">
 				<lens-info-button
@@ -125,7 +132,11 @@
 			<!-- even if code and catalogueGroupCode are the same. -->
 
 			<div class="chart-wrapper chart-double-width">
-				<Linker title="Locator" sampleCount={3500} browseLink="https://locator.bbmri-eric.eu/">
+				<Linker
+					title="Locator"
+					sampleCount="{3500}"
+					browseLink="https://locator.bbmri-eric.eu/"
+				>
 					<lens-chart
 						title="Gender Distribution"
 						catalogueGroupCode="Gender"
@@ -139,13 +150,17 @@
 						catalogueGroupCode="age_at_diagnosis"
 						chartType="bar"
 						displayLegends="{true}"
-						groupRange={10}
+						groupRange="{10}"
 						filterRegex="^(1*[12]*[0-9])"
 					></lens-chart>
 				</Linker>
 			</div>
 			<div class="chart-wrapper chart-double-width">
-				<Linker title="Directory" sampleCount={250000} browseLink="https://directory.bbmri-eric.eu">
+				<Linker
+					title="Directory"
+					sampleCount="{250000}"
+					browseLink="https://directory.bbmri-eric.eu"
+				>
 					<!-- <img src="/DirectoryMock.png" alt="Directory" style="width: 200px; height: auto;" /> -->
 					<img src="/DirectoryMock.png" alt="Directory" />
 				</Linker>
