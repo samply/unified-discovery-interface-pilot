@@ -2,6 +2,8 @@
 	import './app.css';
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
+	import Linker from "./Linker.svelte";
+	import AiSearchField from "./AiSearchField.svelte";
 
 	// If a results table cell contains "-1", it means that the cell is empty,
 	// so we replace it with "-". This is done inside the shadow DOM of the
@@ -83,7 +85,7 @@
 
 <header>
 	<div class="header-panel">
-		<img class="header-panel-image" src="../assets/images/Beacon.PNG" alt="Beacon" />
+		<img class="header-panel-image" src="../assets/images/BBMRI-Logo-Slim.png" alt="UDI" />
 		<p class="header-panel-text">Unified Discovery Interface</p>
 	</div>
 </header>
@@ -91,12 +93,17 @@
 <main>
 	<div class="search">
 		<div class="search-wrapper">
-			<lens-search-bar noMatchesFoundMessage="{'No information found'}"></lens-search-bar>
-			<lens-info-button
-				noQueryMessage="Query with no criteria selected: Searches for all collections."
-				showQuery="{true}"
-			></lens-info-button>
-			<lens-search-button title="Search"></lens-search-button>
+			<div>
+				<AiSearchField />
+				<lens-search-bar noMatchesFoundMessage="{'No information found'}" placeholderText="{'Culumulative query'}"></lens-search-bar>
+			</div>
+			<div class="button-container">
+				<lens-info-button
+					noQueryMessage="Query with no criteria selected: Searches for all collections."
+					showQuery="{true}"
+				></lens-info-button>
+				<lens-search-button title="Search"></lens-search-button>
+			</div>
 		</div>
 	</div>
 	<div class="grid">
@@ -117,15 +124,31 @@
 			<!-- the stratifier to the catalogueGroupCode for the chart. You need to do this -->
 			<!-- even if code and catalogueGroupCode are the same. -->
 
-			<div class="chart-wrapper">
-				<lens-chart
-					title="Gender Distribution"
-					catalogueGroupCode="Gender"
-					chartType="pie"
-					displayLegends="{true}"
-					xAxisTitle="Gender signifier"
-					yAxisTitle="Number of patients"
-				></lens-chart>
+			<div class="chart-wrapper chart-double-width">
+				<Linker title="Locator" sampleCount={3500} browseLink="https://locator.bbmri-eric.eu/">
+					<lens-chart
+						title="Gender Distribution"
+						catalogueGroupCode="Gender"
+						chartType="pie"
+						displayLegends="{true}"
+						xAxisTitle="Gender signifier"
+						yAxisTitle="Number of patients"
+					></lens-chart>
+					<lens-chart
+						title="Age Distribution"
+						catalogueGroupCode="age_at_diagnosis"
+						chartType="bar"
+						displayLegends="{true}"
+						groupRange={10}
+						filterRegex="^(1*[12]*[0-9])"
+					></lens-chart>
+				</Linker>
+			</div>
+			<div class="chart-wrapper chart-double-width">
+				<Linker title="Directory" sampleCount={250000} browseLink="https://directory.bbmri-eric.eu">
+					<!-- <img src="/DirectoryMock.png" alt="Directory" style="width: 200px; height: auto;" /> -->
+					<img src="/DirectoryMock.png" alt="Directory" />
+				</Linker>
 			</div>
 		</div>
 	</div>

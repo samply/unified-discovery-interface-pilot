@@ -257,6 +257,13 @@ lens-search-button {
   }
 }
 
+.button-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-start;
+    align-items: center;
+}
+
 
 .chart-wrapper {
   padding: var(--gap-s);
