@@ -56,8 +56,9 @@
 	import { catalogueText, fetchData } from './services/catalogue.service';
 	import { requestBackend } from './services/backends/backend.service';
 
-	let catalogueopen = false;
-	let catalogueCollapsable = true;
+	// Always show catalog hierarchy
+	let catalogueopen = true;
+	let catalogueCollapsable = false;
 
 	const catalogueUrl = 'catalogues/catalogue-bbmri.json';
 	const optionsFilePath = 'config/options.json';
