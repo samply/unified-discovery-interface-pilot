@@ -15,7 +15,7 @@
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({
 						model: 'mistral',
-						prompt: searchText,
+						prompt: "You are an expert in Biobanks and patient data. You can analyze queries in free text and generate JSON with the following elements: gender (a smple string), diagnosis (a list of ICD-10 codes), age_at_diagnosis (a map, with explicit lower and upper values), date_of_diagnosis, patient_age (a map, with explicit lower and upper values), sample_type (a list), sampling_date, sample_storage_temperature (a list). Please convert the following text into JSON: " + searchText,
 						stream: false // Disables streaming, returns full response at once
 					})
 				});
