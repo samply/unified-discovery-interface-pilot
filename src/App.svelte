@@ -56,8 +56,8 @@
 	import { catalogueText, fetchData } from './services/catalogue.service';
 	import { requestBackend } from './services/backends/backend.service';
 
-	// let catalogueopen = false;
-	// let catalogueCollapsable = true;
+	let catalogueopen = false;
+	let catalogueCollapsable = true;
 
 	const catalogueUrl = 'catalogues/catalogue-bbmri.json';
 	const optionsFilePath = 'config/options.json';
@@ -120,9 +120,11 @@
 			<div class="catalogue">
 				<!-- infoIconUrl should be in static/config/options.json under iconOptions according to the migration guide
 				     for v0.5.0-alpha, but doing that causes a runtime error. -->
-				<lens-catalogue infoIconUrl="info-circle-svgrepo-com.svg" texts="{catalogueText}"
+				<lens-catalogue
+                    infoIconUrl="info-circle-svgrepo-com.svg"
+                    texts="{catalogueText}"
+                    toggle="{{ collapsable: catalogueCollapsable, open: catalogueopen }}"
 				></lens-catalogue>
-				<!-- toggle="{{ collapsable: catalogueCollapsable, open: catalogueopen }}" -->
 			</div>
 		</div>
 		<div class="charts">
