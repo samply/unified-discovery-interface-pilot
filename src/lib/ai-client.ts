@@ -1,7 +1,7 @@
 import { env } from '$env/dynamic/public';
 import { AiQueryResult } from '$lib/types/ai-query-result';
 
-export async function queryAi(searchText: string, tryCount: number): Promise<string> {
+export async function queryAi(searchText: string, tryCount: number): Promise<AiQueryResult | null>{
 	try {
 		const response = await fetch('http://localhost:11434/api/generate', {
 			method: 'POST',
@@ -28,22 +28,13 @@ export async function queryAi(searchText: string, tryCount: number): Promise<str
 			}
 			// End recursion, don't try any more.
 			console.error('Too many attempts to query Mistral, giving up');
-			return '{}';
+			return null;
 		}
 		const parsed: AiQueryResult = AiQueryResult.fromJson(jsonString);
-		console.log('Query result:', parsed);
-		console.log('Gender:', parsed.getGender());
-		console.log('Diagnosis:', parsed.getDiagnosis());
-		console.log('Age at Diagnosis:', parsed.getAgeAtDiagnosis());
-		console.log('Date of Diagnosis:', parsed.getDateOfDiagnosis());
-		console.log('Sampling Date:', parsed.getSamplingDate());
-		console.log('Patient Age:', parsed.getPatientAge());
-		console.log('Sample Type:', parsed.getSampleType());
-		console.log('Storage Temperature:', parsed.getSampleStorageTemperature());
-		return jsonString;
+		return parsed;
 	} catch (error) {
 		console.error('Error querying Mistral:', error);
-		return '{}';
+		return null;
 	}
 }
 

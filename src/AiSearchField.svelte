@@ -1,5 +1,10 @@
-<script>
+<script lang="ts">
     import { queryAi } from '$lib/ai-client';
+	import { AiQueryResult } from '$lib/types/ai-query-result';
+    import type { NumericRangeCategory } from '@samply/lens';
+    //import { activeQueryGroupIndex, addItemToQuery } from '@samply/lens/src/stores/query';
+    //import { addItemToQuery } from '@samply/lens';
+
 
     let searchText = '';
     let loading = false;
@@ -10,7 +15,18 @@
             if (searchText.trim() === '') return;
 
             loading = true;
-            searchText = await queryAi(searchText, 0);
+            let aiQueryResult: AiQueryResult|null = await queryAi(searchText, 0);
+			if (aiQueryResult) {
+				console.log('Query result:', aiQueryResult);
+				console.log('Gender:', aiQueryResult.getGender());
+				console.log('Diagnosis:', aiQueryResult.getDiagnosis());
+				console.log('Age at Diagnosis:', aiQueryResult.getAgeAtDiagnosis());
+				console.log('Date of Diagnosis:', aiQueryResult.getDateOfDiagnosis());
+				console.log('Sampling Date:', aiQueryResult.getSamplingDate());
+				console.log('Patient Age:', aiQueryResult.getPatientAge());
+				console.log('Sample Type:', aiQueryResult.getSampleType());
+				console.log('Storage Temperature:', aiQueryResult.getSampleStorageTemperature());
+			}
             loading = false;
         }
     }
