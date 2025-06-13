@@ -327,12 +327,16 @@ export class AiQueryResult {
 
 		const range = (this as Record<string, unknown>)[fieldName];
 
+		// Lambda to parse age from either a string or a number. If a string is provided,
+		// extract the first group of digits, throwing away any non-digit characters.
 		const parseAge = (value: number | string): number | null => {
 			if (typeof value === 'number') return Number.isInteger(value) ? value : null;
+
 			if (typeof value === 'string') {
-				const trimmed = value.trim();
-				if (/^\d+$/.test(trimmed)) return parseInt(trimmed, 10);
+				const match = value.trim().match(/\d+/); // Find first group of digits
+				if (match) return parseInt(match[0], 10);
 			}
+
 			return null;
 		};
 
