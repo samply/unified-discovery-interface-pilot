@@ -47,6 +47,7 @@
 	"dependencies": {
 		"@samply/lens": "0.5.1",
 		"@sveltejs/adapter-node": "^5.2.9",
+		"chrono-node": "^2.8.2",
 		"uuid": "^11.1.0"
 	}
 }
