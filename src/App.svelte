@@ -6,7 +6,6 @@
 	import AiSearchField from './AiSearchField.svelte';
 	//import { queryStore } from "@samply/lens";
 
-
 	// If a results table cell contains "-1", it means that the cell is empty,
 	// so we replace it with "-". This is done inside the shadow DOM of the
 	// lens-result-table component.
@@ -56,7 +55,7 @@
 	import { measures } from './config/environment';
 	import type { LensDataPasser } from '@samply/lens';
 	import { catalogueText, fetchData } from './services/catalogue.service';
-	import { requestBackend } from './services/backends/backend.service';
+	// import { requestBackend } from './services/backends/backend.service';
 
 	// Always show catalog hierarchy
 	let catalogueopen = true;
@@ -77,14 +76,15 @@
 	 */
 	if (browser) {
 		window.addEventListener('emit-lens-query', (e) => {
-        	console.log('Search button clicked!');
+			console.log('Search button clicked!');
 			if (!dataPasser) return;
 
 			const event = e as CustomEvent;
 			const { ast, updateResponse, abortController } = event.detail;
 			const criteria: string[] = dataPasser.getCriteriaAPI('diagnosis');
 
-			requestBackend(ast, updateResponse, abortController, measures, criteria);
+			//requestBackend(ast, updateResponse, abortController, measures, criteria);
+			console.debug(ast, updateResponse, abortController, measures, criteria);
 		});
 	}
 </script>
@@ -125,9 +125,9 @@
 				<!-- infoIconUrl should be in static/config/options.json under iconOptions according to the migration guide
 				     for v0.5.0-alpha, but doing that causes a runtime error. -->
 				<lens-catalogue
-                    infoIconUrl="info-circle-svgrepo-com.svg"
-                    texts="{catalogueText}"
-                    toggle="{{ collapsable: catalogueCollapsable, open: catalogueopen }}"
+					infoIconUrl="info-circle-svgrepo-com.svg"
+					texts="{catalogueText}"
+					toggle="{{ collapsable: catalogueCollapsable, open: catalogueopen }}"
 				></lens-catalogue>
 			</div>
 		</div>

@@ -22,12 +22,9 @@ export const requestBackend = (
 	const measures: Measure[] = measureGroups[0].measures.map(
 		(measureItem: MeasureItem) => measureItem.measure
 	);
-
 	const queryId = uuidv4();
 	let query = {};
-
 	const newAst = resolveAstSubCategories(ast);
-
 	if (env.PUBLIC_BACKEND_FORMAT === 'cql') {
 		const cql = translateAstToCql(
 			newAst,
@@ -36,7 +33,6 @@ export const requestBackend = (
 			measureGroups[0].measures,
 			criteria
 		);
-
 		const library = buildLibrary(`${cql}`);
 		const measure = buildMeasure(library.url, measures);
 		query = { lang: 'cql', lib: library, measure: measure };
@@ -54,10 +50,8 @@ export const requestBackend = (
 			)
 		};
 	}
-
 	let backendUrl: string = '';
 	let siteList: string[] = [];
-
 	if (env.PUBLIC_ENVIRONMENT === 'test') {
 		backendUrl = 'https://locator-dev.bbmri-eric.eu/backend';
 		siteList = ['lodz-test', 'uppsala-test', 'eric-test', 'prague-uhkt-test'];
@@ -97,12 +91,9 @@ export const requestBackend = (
 			'wuerzburg'
 		];
 	}
-
 	if (env.PUBLIC_BACKEND_URL) {
 		backendUrl = env.PUBLIC_BACKEND_URL;
 	}
-
-	// const backend = new Spot(new URL(backendUrl), siteList, queryId);
-
-	// backend.send(btoa(decodeURI(JSON.stringify(query))), updateResponse, abortController);
+	const backend = new Spot(new URL(backendUrl), siteList, queryId);
+	backend.send(btoa(decodeURI(JSON.stringify(query))), updateResponse, abortController);
 };
