@@ -102,7 +102,7 @@ export const requestBackend = (
 		backendUrl = env.PUBLIC_BACKEND_URL;
 	}
 
-	const backend = new Spot(new URL(backendUrl), siteList, queryId);
+	// const backend = new Spot(new URL(backendUrl), siteList, queryId);
 
-	backend.send(btoa(decodeURI(JSON.stringify(query))), updateResponse, abortController);
+	// backend.send(btoa(decodeURI(JSON.stringify(query))), updateResponse, abortController);
 };

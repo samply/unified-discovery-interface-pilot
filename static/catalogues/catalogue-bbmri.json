@@ -1,5 +1,140 @@
 [
     {
+        "key": "organizational",
+        "name": "Organizational information",
+        "fieldType": "group",
+        "childCategories": [
+            {
+                "key": "country",
+                "name": "Country",
+                "system": "",
+                "fieldType": "single-select",
+                "type": "EQUALS",
+                "infoButtonText": [
+                    "The country where the biobank is situated"
+                ],
+                "criteria": [
+                    {
+                        "key": "UK",
+                        "name": "United Kingdom",
+                        "description": "United Kingdom"
+                    },
+                    {
+                        "key": "DE",
+                        "name": "Germany",
+                        "description": "Germany"
+                    },
+                    {
+                        "key": "FR",
+                        "name": "France",
+                        "description": "France"
+                    },
+                    {
+                        "key": "CZ",
+                        "name": "Czechoslovakia",
+                        "description": "Czechoslovakia"
+                    }
+                ]
+            },
+            {
+                "key": "collection-type",
+                "name": "Collection type",
+                "system": "",
+                "fieldType": "single-select",
+                "type": "EQUALS",
+                "infoButtonText": [
+                    "The kind of data stored in the collection"
+                ],
+                "criteria": [
+                    {
+                        "key": "hospital",
+                        "name": "Hospital",
+                        "description": "Hospital"
+                    },
+                    {
+                        "key": "image-collection",
+                        "name": "Image collection",
+                        "description": "Image collection"
+                    },
+                    {
+                        "key": "longitudinal",
+                        "name": "Longitudinal",
+                        "description": "Longitudinal"
+                    },
+                    {
+                        "key": "non-human",
+                        "name": "Non-human",
+                        "description": "Non-human"
+                    }
+                ]
+            },
+            {
+                "key": "category",
+                "name": "Category",
+                "system": "",
+                "fieldType": "single-select",
+                "type": "EQUALS",
+                "infoButtonText": [
+                    "Main focus of collection"
+                ],
+                "criteria": [
+                    {
+                        "key": "autoimmune-disease",
+                        "name": "Autoimmune disease",
+                        "description": "Autoimmune disease"
+                    },
+                    {
+                        "key": "cardiovascular-disease",
+                        "name": "Cardiovascular disease",
+                        "description": "Cardiovascular disease"
+                    },
+                    {
+                        "key": "covid-19",
+                        "name": "Covid-19",
+                        "description": "Covid-19"
+                    },
+                    {
+                        "key": "infectious-diseases",
+                        "name": "Infectious diseases",
+                        "description": "Infectious diseases"
+                    }
+                ]
+            },
+            {
+                "key": "service-type",
+                "name": "Service type",
+                "system": "",
+                "fieldType": "single-select",
+                "type": "EQUALS",
+                "infoButtonText": [
+                    "Services provided by the biobank"
+                ],
+                "criteria": [
+                    {
+                        "key": "nucleic-acid-extraction",
+                        "name": "Nucleic acid extraction",
+                        "description": "Nucleic acid extraction"
+                    },
+                    {
+                        "key": "data-analysis",
+                        "name": "Data analysis",
+                        "description": "Data analysis"
+                    },
+                    {
+                        "key": "certification-programs",
+                        "name": "Certification programs",
+                        "description": "Certification programs"
+                    },
+                    {
+                        "key": "diagnostic-imaging-service",
+                        "name": "Diagnostic imaging service",
+                        "description": "Diagnostic imaging service"
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "key": "donor",
         "name": "Donor/Clinical Information",
         "fieldType": "group",

@@ -4,6 +4,8 @@
 	import { onMount } from 'svelte';
 	import Linker from './Linker.svelte';
 	import AiSearchField from './AiSearchField.svelte';
+	//import { queryStore } from "@samply/lens";
+
 
 	// If a results table cell contains "-1", it means that the cell is empty,
 	// so we replace it with "-". This is done inside the shadow DOM of the
@@ -75,6 +77,7 @@
 	 */
 	if (browser) {
 		window.addEventListener('emit-lens-query', (e) => {
+        	console.log('Search button clicked!');
 			if (!dataPasser) return;
 
 			const event = e as CustomEvent;
