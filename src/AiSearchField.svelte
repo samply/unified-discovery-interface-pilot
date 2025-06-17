@@ -1,10 +1,9 @@
 <script lang="ts">
     import { queryAi } from '$lib/ai-client';
 	import { AiQueryResult } from '$lib/types/ai-query-result';
-    import type { NumericRangeCategory } from '@samply/lens';
-    //import { activeQueryGroupIndex, addItemToQuery } from '@samply/lens/src/stores/query';
-    //import { addItemToQuery } from '@samply/lens';
-
+    import { addItemToActiveQueryGroup  } from '@samply/lens';
+    import { v4 as uuidv4 } from "uuid";
+	import { AddItems } from '$lib/add-items';
 
     let searchText = '';
     let loading = false;
@@ -26,6 +25,11 @@
 				console.log('Patient Age:', aiQueryResult.getPatientAge());
 				console.log('Sample Type:', aiQueryResult.getSampleType());
 				console.log('Storage Temperature:', aiQueryResult.getSampleStorageTemperature());
+
+				AddItems.gender(aiQueryResult.getGender());
+				AddItems.sampleType(aiQueryResult.getSampleType());
+				AddItems.ageAtDiagnosis(aiQueryResult.getAgeAtDiagnosis());
+				AddItems.patientAge(aiQueryResult.getPatientAge());
 			}
             loading = false;
         }

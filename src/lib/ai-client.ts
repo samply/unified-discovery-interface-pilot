@@ -1,6 +1,22 @@
 import { env } from '$env/dynamic/public';
 import { AiQueryResult } from '$lib/types/ai-query-result';
 
+const staticPromptParts = [
+    'You are an expert in Biobanks and patient data.',
+    'You can analyze queries in free text and generate JSON with the following elements:',
+    'gender (a simple string),',
+    'diagnosis (convert named diagnoses into a list of ICD-10 codes like A02 or C45.1),',
+    'age_at_diagnosis (a map, with explicit lower and upper values),',
+    'date_of_diagnosis (a map, with explicit lower and upper values),',
+    'patient_age (a map, with explicit lower and upper values),',
+    'sample_type (a list containing one or more of the following: blood-serum, tissue-frozen, whole-blood, blood-plasma, derivative-other, tissue-other, peripheral-blood-cells-vital, urine, rna, liquid-other, buffy-coat, dna, csf-liquor, stool-faeces, bone-marrow, tissue-ffpe, saliva, ascites, swab, dried-whole-blood),',
+    'sampling_date (a map, with explicit lower and upper values),',
+    'sample_storage_temperature (a list).',
+    'Please convert the following text into JSON:'
+];
+
+const staticPrompt = staticPromptParts.join(' ');
+
 export async function queryAi(searchText: string, tryCount: number): Promise<AiQueryResult | null>{
 	try {
 		const response = await fetch('http://localhost:11434/api/generate', {
@@ -9,7 +25,8 @@ export async function queryAi(searchText: string, tryCount: number): Promise<AiQ
 			body: JSON.stringify({
 				model: 'mistral',
 				prompt:
-					'You are an expert in Biobanks and patient data. You can analyze queries in free text and generate JSON with the following elements: gender (a smple string), diagnosis (convert named diagnoses intoa list of ICD-10 codes), age_at_diagnosis (a map, with explicit lower and upper values), date_of_diagnosis (a map, with explicit lower and upper values), patient_age (a map, with explicit lower and upper values), sample_type (a list containing one or more of the following: blood-serum, tissue-frozen, whole-blood, blood-plasma, derivative-other, tissue-other, peripheral-blood-cells-vital, urine, rna, liquid-other, buffy-coat, dna, csf-liquor, stool-faeces, bone-marrow, tissue-ffpe, saliva, ascites, swab, dried-whole-blood), sampling_date (a map, with explicit lower and upper values), sample_storage_temperature (a list). Please convert the following text into JSON: ' +
+					//'You are an expert in Biobanks and patient data. You can analyze queries in free text and generate JSON with the following elements: gender (a smple string), diagnosis (convert named diagnoses intoa list of ICD-10 codes), age_at_diagnosis (a map, with explicit lower and upper values), date_of_diagnosis (a map, with explicit lower and upper values), patient_age (a map, with explicit lower and upper values), sample_type (a list containing one or more of the following: blood-serum, tissue-frozen, whole-blood, blood-plasma, derivative-other, tissue-other, peripheral-blood-cells-vital, urine, rna, liquid-other, buffy-coat, dna, csf-liquor, stool-faeces, bone-marrow, tissue-ffpe, saliva, ascites, swab, dried-whole-blood), sampling_date (a map, with explicit lower and upper values), sample_storage_temperature (a list). Please convert the following text into JSON: ' +
+					staticPrompt +
 					searchText,
 				stream: false
 			})

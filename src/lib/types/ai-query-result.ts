@@ -207,6 +207,16 @@ export class AiQueryResult {
 
 			if (allowedSampleTypes.has(cleaned)) {
 				valid.push(cleaned);
+			} else if (cleaned.endsWith('-plasma')) {
+				valid.push("blood-plasma"); // Deal with AI hallucination
+			} else if (cleaned.endsWith('-blood')) {
+				valid.push("whole-blood"); // Deal with AI hallucination
+			} else if (cleaned.startsWith('tissue-')) {
+				valid.push("tissue-other"); // Deal with AI hallucination
+			} else if (cleaned.startsWith('stool-')) {
+				valid.push("stool-faeces"); // Deal with AI hallucination
+			} else if (cleaned.endsWith('-faeces')) {
+				valid.push("stool-faeces"); // Deal with AI hallucination
 			} else {
 				console.warn(`Unrecognized sample type ignored: "${entry}"`);
 			}
@@ -340,13 +350,27 @@ export class AiQueryResult {
 			return null;
 		};
 
-		const lower = parseAge(range.lower);
-		const upper = parseAge(range.upper);
+		if (!('lower' in range) && !('upper' in range)) {
+			console.info(`No elements in "${fieldName}" — returning empty object.`);
+			return {};
+		}
 
 		if (range.lower === '' && range.upper === '') {
 			console.info(`No values in "${fieldName}" — returning empty object.`);
 			return {};
 		}
+
+		// Catch cases where the AI puts things like "60+" into upper
+		if (!range.lower && range.upper !== null && typeof range.upper === 'string') {
+			const match = range.upper.match(/^(\d+)\+/);
+			if (match) {
+				range.lower = parseInt(match[1], 10);
+				range.upper = null;
+			}
+		}
+
+		const lower = parseAge(range.lower);
+		const upper = parseAge(range.upper);
 
 		if (lower === null && upper === null) {
 			console.error(`Invalid or missing bounds in "${fieldName}".`);
