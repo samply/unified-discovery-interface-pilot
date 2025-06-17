@@ -1,6 +1,6 @@
 import * as chrono from 'chrono-node';
 
-type FieldType = 'string' | 'string[]' | 'object';
+type FieldType = 'string' | '[]' | 'string[]' | 'object';
 type EmptyObject = Record<string, never>;
 type AgeRange = { lower: number | null; upper: number | null };
 type DateRange = { lower: Date | null; upper: Date | null };
@@ -107,6 +107,13 @@ export class AiQueryResult {
 				}
 				break;
 
+			case '[]':
+				if (!Array.isArray(value)) {
+					console.error(`Field "${field}" is not an array:`, value);
+					return false;
+				}
+				break;
+
 			case 'string[]':
 				if (!Array.isArray(value) || !value.every((v) => typeof v === 'string')) {
 					console.error(`Field "${field}" is not an array of strings:`, value);
@@ -140,9 +147,17 @@ export class AiQueryResult {
 	 * If the raw value is not recognized, a warning is logged and null is returned.
 	 */
 	public getGender(): 'male' | 'female' | 'unknown' | 'other' | null {
-		if (!this.validateField('gender', 'string')) return null;
+		let raw: string;
+		if (!this.validateField('gender', 'string')) {
+			if (!this.validateField('gender', 'string[]')) {
+				return null;
+			}
+			raw = this.gender[0].trim().toLowerCase();
+		} else {
+			raw = this.gender.trim().toLowerCase();
+		}
+		
 
-		const raw = this.gender.trim().toLowerCase();
 		const normalized = genderMap[raw];
 
 		if (!normalized) {
@@ -487,7 +502,7 @@ export class AiQueryResult {
 	};
 
 	public getSampleStorageTemperature(): string[] | null {
-		if (!this.validateField('sample_storage_temperature', 'string[]')) return null;
+		if (!this.validateField('sample_storage_temperature', '[]')) return null;
 
 		const original = this.sample_storage_temperature;
 		const normalized: string[] = [];
