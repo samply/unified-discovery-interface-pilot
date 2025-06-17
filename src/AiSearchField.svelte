@@ -1,35 +1,39 @@
-<script>
+<script lang="ts">
+	import { queryAi } from '$lib/ai-client';
+	import { AiQueryResult } from '$lib/types/ai-query-result';
+	import { AddItems } from '$lib/add-items';
+
 	let searchText = '';
 	let loading = false;
 
 	async function handleKeyPress(event) {
 		if (event.key === 'Enter') {
-			event.preventDefault(); // Prevents newline in `textarea`
+			event.preventDefault();
 			if (searchText.trim() === '') return;
 
 			loading = true;
+			let aiQueryResult: AiQueryResult | null = await queryAi(searchText, 0);
+			if (aiQueryResult) {
+				console.log('Query result:', aiQueryResult);
+				console.log('Gender:', aiQueryResult.getGender());
+				console.log('Diagnosis:', aiQueryResult.getDiagnosis());
+				console.log('Age at Diagnosis:', aiQueryResult.getAgeAtDiagnosis());
+				console.log('Date of Diagnosis:', aiQueryResult.getDateOfDiagnosis());
+				console.log('Sampling Date:', aiQueryResult.getSamplingDate());
+				console.log('Patient Age:', aiQueryResult.getPatientAge());
+				console.log('Sample Type:', aiQueryResult.getSampleType());
+				console.log('Storage Temperature:', aiQueryResult.getSampleStorageTemperature());
 
-			try {
-				const response = await fetch('http://localhost:11434/api/generate', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({
-						model: 'mistral',
-						prompt:
-							'You are an expert in Biobanks and patient data. You can analyze queries in free text and generate JSON with the following elements: gender (a smple string), diagnosis (a list of ICD-10 codes), age_at_diagnosis (a map, with explicit lower and upper values), date_of_diagnosis, patient_age (a map, with explicit lower and upper values), sample_type (a list), sampling_date, sample_storage_temperature (a list). Please convert the following text into JSON: ' +
-							searchText,
-						stream: false // Disables streaming, returns full response at once
-					})
-				});
-
-				const data = await response.json();
-				searchText = data.response; // Directly set the full response
-			} catch (error) {
-				console.error('Error:', error);
-				searchText = 'Error contacting Ollama.';
-			} finally {
-				loading = false;
+				AddItems.gender(aiQueryResult.getGender());
+				AddItems.sampleType(aiQueryResult.getSampleType());
+				AddItems.diagnosis(aiQueryResult.getDiagnosis());
+				AddItems.storageTemperature(aiQueryResult.getSampleStorageTemperature());
+				AddItems.ageAtDiagnosis(aiQueryResult.getAgeAtDiagnosis());
+				AddItems.patientAge(aiQueryResult.getPatientAge());
+				AddItems.dateOfDiagnosis(aiQueryResult.getDateOfDiagnosis());
+				AddItems.samplingDate(aiQueryResult.getSamplingDate());
 			}
+			loading = false;
 		}
 	}
 </script>
