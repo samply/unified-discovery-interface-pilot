@@ -1,20 +1,18 @@
 <script lang="ts">
-    import { queryAi } from '$lib/ai-client';
+	import { queryAi } from '$lib/ai-client';
 	import { AiQueryResult } from '$lib/types/ai-query-result';
-    import { addItemToActiveQueryGroup  } from '@samply/lens';
-    import { v4 as uuidv4 } from "uuid";
 	import { AddItems } from '$lib/add-items';
 
-    let searchText = '';
-    let loading = false;
+	let searchText = '';
+	let loading = false;
 
-    async function handleKeyPress(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            if (searchText.trim() === '') return;
+	async function handleKeyPress(event) {
+		if (event.key === 'Enter') {
+			event.preventDefault();
+			if (searchText.trim() === '') return;
 
-            loading = true;
-            let aiQueryResult: AiQueryResult|null = await queryAi(searchText, 0);
+			loading = true;
+			let aiQueryResult: AiQueryResult | null = await queryAi(searchText, 0);
 			if (aiQueryResult) {
 				console.log('Query result:', aiQueryResult);
 				console.log('Gender:', aiQueryResult.getGender());
@@ -31,9 +29,9 @@
 				AddItems.ageAtDiagnosis(aiQueryResult.getAgeAtDiagnosis());
 				AddItems.patientAge(aiQueryResult.getPatientAge());
 			}
-            loading = false;
-        }
-    }
+			loading = false;
+		}
+	}
 </script>
 
 <textarea

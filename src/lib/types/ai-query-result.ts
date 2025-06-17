@@ -208,15 +208,15 @@ export class AiQueryResult {
 			if (allowedSampleTypes.has(cleaned)) {
 				valid.push(cleaned);
 			} else if (cleaned.endsWith('-plasma')) {
-				valid.push("blood-plasma"); // Deal with AI hallucination
+				valid.push('blood-plasma'); // Deal with AI hallucination
 			} else if (cleaned.endsWith('-blood')) {
-				valid.push("whole-blood"); // Deal with AI hallucination
+				valid.push('whole-blood'); // Deal with AI hallucination
 			} else if (cleaned.startsWith('tissue-')) {
-				valid.push("tissue-other"); // Deal with AI hallucination
+				valid.push('tissue-other'); // Deal with AI hallucination
 			} else if (cleaned.startsWith('stool-')) {
-				valid.push("stool-faeces"); // Deal with AI hallucination
+				valid.push('stool-faeces'); // Deal with AI hallucination
 			} else if (cleaned.endsWith('-faeces')) {
-				valid.push("stool-faeces"); // Deal with AI hallucination
+				valid.push('stool-faeces'); // Deal with AI hallucination
 			} else {
 				console.warn(`Unrecognized sample type ignored: "${entry}"`);
 			}
