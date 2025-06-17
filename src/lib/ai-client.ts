@@ -164,17 +164,18 @@ function cleanResponse(response: any): string {
  * @returns {string} - The fixed string
  */
 function fixUnquotedJsonValues(input: string): string {
-    // Match: "key": unquoted_value (not wrapped in quotes), followed by comma or closing brace
-    const pattern = /("([^"]+)")\s*:\s*([^"\{\[\}\],\n\r]+)(?=\s*[,}])/g;
+	// Match: "key": unquoted_value (not wrapped in quotes), followed by comma or closing brace
+	//const pattern = /("([^"]+)")\s*:\s*([^"\{\[\}\],\n\r]+)(?=\s*[,}])/g;
+	const pattern = /("([^"]+)")\s*:\s*([^"{[}\],\n\r]+)(?=\s*[,}])/g;
 
-    return input.replace(pattern, (_, fullKey, keyName, value) => {
-        const trimmed = value.trim();
-        // Avoid wrapping if it looks like a number, boolean, or null
-        if (/^(true|false|null|\d+(\.\d+)?|\d+)$/.test(trimmed)) {
-            return `"${keyName}": ${trimmed}`;
-        }
-        return `"${keyName}": "${trimmed}"`;
-    });
+	return input.replace(pattern, (_, fullKey, keyName, value) => {
+		const trimmed = value.trim();
+		// Avoid wrapping if it looks like a number, boolean, or null
+		if (/^(true|false|null|\d+(\.\d+)?|\d+)$/.test(trimmed)) {
+			return `"${keyName}": ${trimmed}`;
+		}
+		return `"${keyName}": "${trimmed}"`;
+	});
 }
 
 /**
@@ -205,11 +206,11 @@ function fixUnquotedJsonValues(input: string): string {
  * @returns {string} - The fixed string
  */
 function removeStandaloneStringFromBraces(input: string): string {
-    // Match: "some_key": { "value" }, where "value" is a string, and there’s no inner key
-    const pattern = /"(\w+)"\s*:\s*\{\s*"([^"]+)"\s*\}/g;
+	// Match: "some_key": { "value" }, where "value" is a string, and there’s no inner key
+	const pattern = /"(\w+)"\s*:\s*\{\s*"([^"]+)"\s*\}/g;
 
-    return input.replace(pattern, (_match, key, value) => {
-        console.warn(`Removing stray string "${value}" from object for key "${key}"`);
-        return `"${key}": {}`;
-    });
+	return input.replace(pattern, (_match, key, value) => {
+		console.warn(`Removing stray string "${value}" from object for key "${key}"`);
+		return `"${key}": {}`;
+	});
 }
