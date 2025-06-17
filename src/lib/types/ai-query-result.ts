@@ -157,7 +157,6 @@ export class AiQueryResult {
 		} else {
 			raw = this.gender.trim().toLowerCase();
 		}
-		
 
 		const normalized = genderMap[raw];
 
@@ -283,7 +282,9 @@ export class AiQueryResult {
 		const parsedUpper = rawUpper ? chrono.parseDate(rawUpper) : null;
 
 		if (!parsedLower && !parsedUpper) {
-			console.error(`Failed to parse any bounds for "${fieldName}". rawLower: ${rawLower}, rawUpper: ${rawUpper}`);
+			console.error(
+				`Failed to parse any bounds for "${fieldName}". rawLower: ${rawLower}, rawUpper: ${rawUpper}`
+			);
 			return null;
 		}
 
@@ -362,9 +363,7 @@ export class AiQueryResult {
 	 * @param fieldName - The name of the field containing the age range to parse.
 	 * @returns An object with "lower" and "upper" properties, or an empty object, or null.
 	 */
-	private parseAgeRange(
-		fieldName: string
-	): AgeRange | EmptyObject | null {
+	private parseAgeRange(fieldName: string): AgeRange | EmptyObject | null {
 		if (!this.validateField(fieldName, 'object')) return null;
 
 		const range = (this as Record<string, unknown>)[fieldName];
@@ -410,8 +409,10 @@ export class AiQueryResult {
 		}
 
 		if (lower !== null && upper !== null && lower > upper) {
-			console.warn(`"${fieldName}" lower bound (${lower}) is greater than upper bound (${upper}).`);
-			lower = upper
+			console.warn(
+				`"${fieldName}" lower bound (${lower}) is greater than upper bound (${upper}).`
+			);
+			lower = upper;
 		}
 
 		if (lower !== null && lower >= 150) {
@@ -520,9 +521,7 @@ export class AiQueryResult {
 		if (/gas\s?nitrogen/.test(value)) return 'temperatureGN';
 		if (/uncharted|unknown/.test(value)) return 'storage_temperature_uncharted';
 
-		console.warn(
-			`Unrecognized temperature input: "${input}"`
-		);
+		console.warn(`Unrecognized temperature input: "${input}"`);
 		return '';
 	};
 
