@@ -27,9 +27,7 @@ export async function queryAi(
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
 				model: 'mistral',
-				prompt:
-					//'You are an expert in Biobanks and patient data. You can analyze queries in free text and generate JSON with the following elements: gender (a smple string), diagnosis (convert named diagnoses intoa list of ICD-10 codes), age_at_diagnosis (a map, with explicit lower and upper values), date_of_diagnosis (a map, with explicit lower and upper values), patient_age (a map, with explicit lower and upper values), sample_type (a list containing one or more of the following: blood-serum, tissue-frozen, whole-blood, blood-plasma, derivative-other, tissue-other, peripheral-blood-cells-vital, urine, rna, liquid-other, buffy-coat, dna, csf-liquor, stool-faeces, bone-marrow, tissue-ffpe, saliva, ascites, swab, dried-whole-blood), sampling_date (a map, with explicit lower and upper values), sample_storage_temperature (a list). Please convert the following text into JSON: ' +
-					staticPrompt + searchText,
+				prompt: staticPrompt + searchText,
 				stream: false
 			})
 		});
@@ -66,6 +64,8 @@ export async function queryAi(
  * - Strips content before the first `{` and after the last `}`.
  * - Ensures the string starts and ends with curly braces.
  * - Removes any trailing commas.
+ * - Fixes unquoted JSON values.
+ * - Remove standalone string values from JSON objects.
  *
  * @param response - The response to be cleaned.
  * @returns A cleaned string formatted as JSON or an empty string on error
@@ -122,6 +122,12 @@ function cleanResponse(response: any): string {
 		text = text.trim() + '}';
 	}
 
+	// Fix unquoted JSON values
+	text = fixUnquotedJsonValues(text);
+
+	// Remove standalone string values from JSON objects.
+	text = removeStandaloneStringFromBraces(text);
+
 	console.log('cleanResponse: final text: ', text);
 
 	// Test text to see if it is valid JSON
@@ -135,33 +141,75 @@ function cleanResponse(response: any): string {
 	return text;
 }
 
-export function cleanJsonResponse(content: string): string {
-	// Ensure we have a valid string
-	if (!content || typeof content !== 'string') {
-		console.error('Invalid input: expected a string.');
-		return '{}'; // Return an empty JSON object
-	}
+/**
+ * Fix unquoted JSON values in a string.
+ *
+ * This function takes a string representing a JSON object, and
+ * returns a new string with any unquoted values wrapped in quotes.
+ *
+ * Unquoted values are matched by the following pattern:
+ *
+ *   "key": unquoted_value (not wrapped in quotes), followed by comma or closing brace
+ *
+ * The replacement string is:
+ *
+ *   "${keyName}": "${trimmed}"
+ *
+ * unless the value is a number, boolean, or null, in which case the
+ * replacement string is:
+ *
+ *   "${keyName}": ${trimmed}
+ *
+ * @param {string} input - The input string
+ * @returns {string} - The fixed string
+ */
+function fixUnquotedJsonValues(input: string): string {
+    // Match: "key": unquoted_value (not wrapped in quotes), followed by comma or closing brace
+    const pattern = /("([^"]+)")\s*:\s*([^"\{\[\}\],\n\r]+)(?=\s*[,}])/g;
 
-	// Get rid of everything before the first `{` (if present)
-	let jsonStr = content.includes('{') ? content.substring(content.indexOf('{')) : content;
+    return input.replace(pattern, (_, fullKey, keyName, value) => {
+        const trimmed = value.trim();
+        // Avoid wrapping if it looks like a number, boolean, or null
+        if (/^(true|false|null|\d+(\.\d+)?|\d+)$/.test(trimmed)) {
+            return `"${keyName}": ${trimmed}`;
+        }
+        return `"${keyName}": "${trimmed}"`;
+    });
+}
 
-	// Get rid of everything after the last `}` (if present)
-	jsonStr = jsonStr.replace(/}[^}]*$/, '}');
+/**
+ * Remove standalone string values from JSON objects.
+ *
+ * This function takes a string representing a JSON object, and
+ * returns a new string with any standalone string values (i.e.
+ * where the value is a string, and there is no inner key) removed
+ * from the object.
+ *
+ * The replacement string is an empty object.
+ *
+ * Example input:
+ *
+ *   {
+ *     "key1": "value1",
+ *     "key2": { "value2" }
+ *   }
+ *
+ * Example output:
+ *
+ *   {
+ *     "key1": "value1",
+ *     "key2": {}
+ *   }
+ *
+ * @param {string} input - The input string
+ * @returns {string} - The fixed string
+ */
+function removeStandaloneStringFromBraces(input: string): string {
+    // Match: "some_key": { "value" }, where "value" is a string, and there’s no inner key
+    const pattern = /"(\w+)"\s*:\s*\{\s*"([^"]+)"\s*\}/g;
 
-	// Add an initial `{` if missing
-	if (!jsonStr.trim().startsWith('{')) {
-		jsonStr = '{' + jsonStr.trim();
-	}
-
-	// Remove trailing comma if present
-	if (jsonStr.trim().endsWith(',')) {
-		jsonStr = jsonStr.trim().slice(0, -1);
-	}
-
-	// Add a closing `}` if missing
-	if (!jsonStr.trim().endsWith('}')) {
-		jsonStr = jsonStr.trim() + '}';
-	}
-
-	return jsonStr;
+    return input.replace(pattern, (_match, key, value) => {
+        console.warn(`Removing stray string "${value}" from object for key "${key}"`);
+        return `"${key}": {}`;
+    });
 }

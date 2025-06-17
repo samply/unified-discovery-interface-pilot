@@ -26,8 +26,12 @@
 
 				AddItems.gender(aiQueryResult.getGender());
 				AddItems.sampleType(aiQueryResult.getSampleType());
+				AddItems.diagnosis(aiQueryResult.getDiagnosis());
+				AddItems.storageTemperature(aiQueryResult.getSampleStorageTemperature());
 				AddItems.ageAtDiagnosis(aiQueryResult.getAgeAtDiagnosis());
 				AddItems.patientAge(aiQueryResult.getPatientAge());
+				AddItems.dateOfDiagnosis(aiQueryResult.getDateOfDiagnosis());
+				AddItems.samplingDate(aiQueryResult.getSamplingDate());
 			}
 			loading = false;
 		}

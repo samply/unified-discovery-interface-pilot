@@ -211,6 +211,10 @@ export class AiQueryResult {
 				valid.push('blood-plasma'); // Deal with AI hallucination
 			} else if (cleaned.endsWith('-blood')) {
 				valid.push('whole-blood'); // Deal with AI hallucination
+			} else if (cleaned.startsWith('blood-')) {
+				valid.push('whole-blood'); // Deal with AI hallucination
+			} else if (cleaned.endsWith('-tissue')) {
+				valid.push('tissue-other'); // Deal with AI hallucination
 			} else if (cleaned.startsWith('tissue-')) {
 				valid.push('tissue-other'); // Deal with AI hallucination
 			} else if (cleaned.startsWith('stool-')) {
