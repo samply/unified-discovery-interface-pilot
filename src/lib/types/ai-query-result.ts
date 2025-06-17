@@ -25,7 +25,8 @@ const genderMap: Record<string, 'male' | 'female' | 'unknown' | 'other'> = {
 	nonbinary: 'other',
 	'non-binary': 'other',
 	diverse: 'other',
-	intersexual: 'other'
+	intersexual: 'other',
+	transgender: 'other'
 };
 const allowedSampleTypes = new Set([
 	'blood-serum',
@@ -282,11 +283,23 @@ export class AiQueryResult {
 		const parsedUpper = rawUpper ? chrono.parseDate(rawUpper) : null;
 
 		if (!parsedLower && !parsedUpper) {
-			console.error(`Failed to parse any bounds for "${fieldName}".`);
+			console.error(`Failed to parse any bounds for "${fieldName}". rawLower: ${rawLower}, rawUpper: ${rawUpper}`);
 			return null;
 		}
 
 		return { lower: parsedLower, upper: parsedUpper };
+	}
+
+	private parseDate(raw: string): Date | null {
+		if (raw && typeof raw === 'string') {
+			const match = raw.match(/\b(19|20)\d{2}\b/); // Match 4-digit years from 1900–2099
+
+			if (match) {
+				const year = match[0];
+				raw = `1 January ${year}`;
+			}
+		}
+		return raw ? chrono.parseDate(raw) : null;
 	}
 
 	/**
@@ -351,7 +364,7 @@ export class AiQueryResult {
 	 */
 	private parseAgeRange(
 		fieldName: string
-	): { lower: number | null; upper: number | null } | EmptyObject | null {
+	): AgeRange | EmptyObject | null {
 		if (!this.validateField(fieldName, 'object')) return null;
 
 		const range = (this as Record<string, unknown>)[fieldName];
@@ -388,8 +401,8 @@ export class AiQueryResult {
 			}
 		}
 
-		const lower = parseAge(range.lower);
-		const upper = parseAge(range.upper);
+		let lower = parseAge(range.lower);
+		let upper = parseAge(range.upper);
 
 		if (lower === null && upper === null) {
 			console.error(`Invalid or missing bounds in "${fieldName}".`);
@@ -397,9 +410,18 @@ export class AiQueryResult {
 		}
 
 		if (lower !== null && upper !== null && lower > upper) {
-			console.warn(
-				`"${fieldName}" lower bound (${lower}) is greater than upper bound (${upper}).`
-			);
+			console.warn(`"${fieldName}" lower bound (${lower}) is greater than upper bound (${upper}).`);
+			lower = upper
+		}
+
+		if (lower !== null && lower >= 150) {
+			console.warn(`"${fieldName}" lower bound (${lower}) is unreasonably large.`);
+			lower = null;
+		}
+
+		if (upper !== null && upper >= 150) {
+			console.warn(`"${fieldName}" upper bound (${upper}) is unreasonably large.`);
+			upper = null;
 		}
 
 		return { lower, upper };
@@ -444,6 +466,9 @@ export class AiQueryResult {
 		const patientAge = this.getPatientAge();
 		const diagnosisAge = this.parseAgeRange('age_at_diagnosis');
 
+		// If both age ranges only specify one bound (say, just lower: 60) and they’re the
+		// same, the following block concludes there's no meaningful difference between
+		// “age at diagnosis” and “current patient age,” so it opts to skip one to avoid duplication.
 		if (
 			patientAge &&
 			diagnosisAge &&
@@ -496,9 +521,9 @@ export class AiQueryResult {
 		if (/uncharted|unknown/.test(value)) return 'storage_temperature_uncharted';
 
 		console.warn(
-			`Unrecognized temperature input: "${input}" – defaulting to temperatureOther.`
+			`Unrecognized temperature input: "${input}"`
 		);
-		return 'temperatureOther';
+		return '';
 	};
 
 	public getSampleStorageTemperature(): string[] | null {

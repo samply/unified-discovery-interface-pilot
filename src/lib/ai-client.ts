@@ -128,6 +128,12 @@ function cleanResponse(response: any): string {
 	// Remove standalone string values from JSON objects.
 	text = removeStandaloneStringFromBraces(text);
 
+	// Fix missing commas between adjacent closing brackets/braces/quotes
+	text = fixMissingCommas(text);
+
+	// Remove trailing commas in lists or maps
+	text = removeTrailingCommas(text);
+
 	console.log('cleanResponse: final text: ', text);
 
 	// Test text to see if it is valid JSON
@@ -213,4 +219,41 @@ function removeStandaloneStringFromBraces(input: string): string {
 		console.warn(`Removing stray string "${value}" from object for key "${key}"`);
 		return `"${key}": {}`;
 	});
+}
+
+/**
+ * Fix missing commas between adjacent closing brackets/braces or quoted strings.
+ *
+ * This function takes a string representing a JSON object, and returns a new
+ * string with any missing commas between adjacent closing brackets/braces or
+ * quoted strings added.
+ *
+ * The search pattern is two adjacent closing brackets/braces or quoted strings
+ * that should be separated by a comma. The replacement string is the first
+ * matched group, followed by a comma, followed by the second matched group.
+ *
+ * @param {string} input - The input string
+ * @returns {string} - The fixed string
+ */
+
+function fixMissingCommas(input: string): string {
+    // Look for adjacent closing brackets/braces or quoted strings that should be separated by a comma
+    const pattern = /("\s*]|\}\s*")(\s*")/g;
+
+    return input.replace(pattern, '$1,$2');
+}
+
+/**
+ * Removes trailing commas from a JSON-like string.
+ *
+ * This function takes a string as input and removes any commas that
+ * appear immediately before a closing bracket (either ']' or '}').
+ *
+ * @param input - The input string from which to remove trailing commas.
+ * @returns A new string with trailing commas removed.
+ */
+
+function removeTrailingCommas(input: string): string {
+    // Remove any comma that comes just before a closing ] or }
+    return input.replace(/,\s*([\]}])/g, '$1');
 }
