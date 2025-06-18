@@ -60,7 +60,11 @@ export class AiQueryResult {
 		public readonly patient_age: AgeRange,
 		public readonly sample_type: string[],
 		public readonly sampling_date: DateRange,
-		public readonly sample_storage_temperature: string[]
+		public readonly sample_storage_temperature: string[],
+		public readonly country: string[],
+		public readonly collection_type: string[],
+		public readonly category: string[],
+		public readonly service_type: string[]
 	) {}
 
 	// Static factory to handle JSON parsing
@@ -74,7 +78,11 @@ export class AiQueryResult {
 			obj.patient_age,
 			obj.sample_type,
 			obj.sampling_date,
-			obj.sample_storage_temperature
+			obj.sample_storage_temperature,
+			obj.country,
+			obj.collection_type,
+			obj.category,
+			obj.service_type
 		);
 	}
 
@@ -135,6 +143,26 @@ export class AiQueryResult {
 		}
 
 		return true;
+	}
+
+	public getCountry(): string[] | null {
+		if (!this.validateField('country', 'string[]')) return null;
+		return this.country;
+	}
+
+	public getCollectionType(): string[] | null {
+		if (!this.validateField('collection_type', 'string[]')) return null;
+		return this.collection_type;
+	}
+
+	public getCategory(): string[] | null {
+		if (!this.validateField('category', 'string[]')) return null;
+		return this.category;
+	}
+
+	public getServiceType(): string[] | null {
+		if (!this.validateField('service_type', 'string[]')) return null;
+		return this.service_type;
 	}
 
 	/**

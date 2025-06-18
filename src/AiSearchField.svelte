@@ -23,6 +23,10 @@
 				console.log('Patient Age:', aiQueryResult.getPatientAge());
 				console.log('Sample Type:', aiQueryResult.getSampleType());
 				console.log('Storage Temperature:', aiQueryResult.getSampleStorageTemperature());
+				console.log('Country:', aiQueryResult.getCountry());
+				console.log('Collection Type:', aiQueryResult.getCollectionType());
+				console.log('Category:', aiQueryResult.getCategory());
+				console.log('Service Type:', aiQueryResult.getServiceType());
 
 				AddItems.gender(aiQueryResult.getGender());
 				AddItems.sampleType(aiQueryResult.getSampleType());
@@ -32,6 +36,10 @@
 				AddItems.patientAge(aiQueryResult.getPatientAge());
 				AddItems.dateOfDiagnosis(aiQueryResult.getDateOfDiagnosis());
 				AddItems.samplingDate(aiQueryResult.getSamplingDate());
+				AddItems.country(aiQueryResult.getCountry());
+				AddItems.collectionType(aiQueryResult.getCollectionType());
+				AddItems.category(aiQueryResult.getCategory());
+				AddItems.serviceType(aiQueryResult.getServiceType());
 			}
 			loading = false;
 		}

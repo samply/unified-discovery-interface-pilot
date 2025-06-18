@@ -9,9 +9,13 @@ const staticPromptParts = [
 	'age_at_diagnosis (a map, with explicit lower and upper values),',
 	'date_of_diagnosis (a map, with explicit lower and upper values),',
 	'patient_age (a map, with explicit lower and upper values),',
-	'sample_type (a list containing one or more of the following: blood-serum, tissue-frozen, whole-blood, blood-plasma, derivative-other, tissue-other, peripheral-blood-cells-vital, urine, rna, liquid-other, buffy-coat, dna, csf-liquor, stool-faeces, bone-marrow, tissue-ffpe, saliva, ascites, swab, dried-whole-blood),',
+	'sample_type (a list containing zero or more of the following: blood-serum, tissue-frozen, whole-blood, blood-plasma, derivative-other, tissue-other, peripheral-blood-cells-vital, urine, rna, liquid-other, buffy-coat, dna, csf-liquor, stool-faeces, bone-marrow, tissue-ffpe, saliva, ascites, swab, dried-whole-blood),',
 	'sampling_date (a map, with explicit lower and upper values),',
-	'sample_storage_temperature (a list).',
+	'sample_storage_temperature (a list),',
+	'country (a list of two letter country codes, e.g. DE),',
+	'collection_type (a list containing zero or more of the following: BIRTH_COHORT, CASE_CONTROL, COHORT, CROSS_SECTIONAL, DISEASE_SPECIFIC, IMAGE, HOSPITAL, LONGITUDINAL, NON_HUMAN, POPULATION_BASED, TWIN_STUDY),',
+	'category (a list containing zero or more of the following: autoimmune,cardiovascular,covid19,infectious,metabolic,nervous_system,oncology,paediatrics,population,rare_disease),',
+	'service_type (a list containing zero or more of the following: ai-consulting,algorithm-design,animal-model-development,assay-development,BehavioralScience,BigDataManagement,Bioimage-analysis,biomarker-discovery,biostatistic-services,BrainNeurologicalResearch,CancerResearch,cell-line-development,CertificationPrograms,clinical-chemistry-services,CollaborationNetworkingMulticentricStudies,ComputingServices,ConsultationProtocolDevelopment,data-analysis,Diagnostic-Imaging-Service,EpidemiologyInfectiousDiseaseResearch,ethics-proposal-review,functional-and-system-analytics,genomic-annotation,genomics-analysis,Histology-Tissue-Analysis,informed-consent-management,lipidomics-analysis,Live-Cell-Imaging,metabolomics-analysis,microbiome-analysis,MicrobiomeStudies,Microscopy-Techniques,MRI-CT-Imaging,nucleic-acid-extraction,otherBiobankingElsiServices,otherBioinformaticsDataScienceServices,otherConsultingTrainingEducationServices,otherPathologyImagingServices,OtherResearchDomains,otherSampleBioanalyticalServices,PathologySupport,PediatricResearch,peptide-carbohydrate-lipid-analytics,PET-Scans,pharmacokinetic-pharmacodynamic-services,protein-analytics,protein-purification,proteomics-analysis,RareDiseaseResearch,sample-collection,sample-data-management,sample-processing,sample-quality-control,sample-storage,ScientificAdvisoryClinicalStudies,sequencing,software-development,StrategicPlanningforClinicalStudies,tissue-culture,toxicology-testing,TrainingResourceLabProtocols,transcriptomics-analysis),',
 	'Please convert the following text into JSON:'
 ];
 
