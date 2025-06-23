@@ -1,17 +1,22 @@
-FROM node:lts AS build
+FROM node:20 AS build
 ARG TARGET_ENVIRONMENT="staging"
 WORKDIR /usr/src/app
 RUN sh -c '[ -z "$http_proxy" ] || ( npm config set proxy $http_proxy; npm config set https-proxy $http_proxy )'
-COPY package.json ./
-COPY ./vite.config.ts ./svelte.config.js ./
+COPY ./.env ./.env
+COPY ./package.json ./package.json
+COPY ./playwright.config.ts ./playwright.config.ts
 COPY ./src ./src
 COPY ./static ./static
+COPY ./svelte.config.js ./svelte.config.js
+COPY ./tests ./tests
+COPY ./tsconfig.json ./tsconfig.json
+COPY ./vite.config.ts ./vite.config.ts
 
 RUN npm install vite --save-dev
-RUN npm install @samply/lens
+
 RUN VITE_TARGET_ENVIRONMENT=${TARGET_ENVIRONMENT} npm run build
 
-FROM node:lts AS deploy
+FROM node:20 AS deploy
 
 WORKDIR /app
 
