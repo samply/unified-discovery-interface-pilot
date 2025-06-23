@@ -241,10 +241,10 @@ function removeStandaloneStringFromBraces(input: string): string {
  */
 
 function fixMissingCommas(input: string): string {
-    // Look for adjacent closing brackets/braces or quoted strings that should be separated by a comma
-    const pattern = /("\s*]|\}\s*")(\s*")/g;
+	// Look for adjacent closing brackets/braces or quoted strings that should be separated by a comma
+	const pattern = /("\s*]|\}\s*")(\s*")/g;
 
-    return input.replace(pattern, '$1,$2');
+	return input.replace(pattern, '$1,$2');
 }
 
 /**
@@ -258,6 +258,6 @@ function fixMissingCommas(input: string): string {
  */
 
 function removeTrailingCommas(input: string): string {
-    // Remove any comma that comes just before a closing ] or }
-    return input.replace(/,\s*([\]}])/g, '$1');
+	// Remove any comma that comes just before a closing ] or }
+	return input.replace(/,\s*([\]}])/g, '$1');
 }
