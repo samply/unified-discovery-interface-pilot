@@ -55,7 +55,7 @@
 	import { measures } from './config/environment';
 	import type { LensDataPasser } from '@samply/lens';
 	import { catalogueText, fetchData } from './services/catalogue.service';
-	// import { requestBackend } from './services/backends/backend.service';
+	import { requestBackend } from './services/backends/backend.service';
 
 	// Always show catalog hierarchy
 	let catalogueopen = true;
@@ -83,8 +83,8 @@
 			const { ast, updateResponse, abortController } = event.detail;
 			const criteria: string[] = dataPasser.getCriteriaAPI('diagnosis');
 
-			//requestBackend(ast, updateResponse, abortController, measures, criteria);
-			console.debug(ast, updateResponse, abortController, measures, criteria);
+			requestBackend(ast, updateResponse, abortController, measures, criteria);
+			console.log('App: requestBackend completed');
 		});
 	}
 </script>

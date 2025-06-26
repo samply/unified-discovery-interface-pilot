@@ -4,6 +4,8 @@
         "infoUrl": "info-circle-svgrepo-com.svg"
     },
     "siteMappings": {
+        "udi": "UDI",
+        "udi-test": "UDI-Test",
         "stockholm": "Stockholm",
         "athens": "Athens",
         "bucharest": "Bucharest",
@@ -25,10 +27,10 @@
         },
         "gender": {
             "legendMapping": {
-                "male": "Männlich",
-                "female": "Weiblich",
-                "unknown": "Unbekannt",
-                "other": "Divers"
+                "male": "Male",
+                "female": "Female",
+                "unknown": "Unknown",
+                "other": "Other"
             }
         },
         "diagnosis": {

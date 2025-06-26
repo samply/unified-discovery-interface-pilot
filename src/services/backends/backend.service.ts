@@ -19,6 +19,8 @@ export const requestBackend = (
 	measureGroups: MeasureGroup[],
 	criteria: string[]
 ) => {
+	console.log('requestBackend: Sites: entered');
+
 	const measures: Measure[] = measureGroups[0].measures.map(
 		(measureItem: MeasureItem) => measureItem.measure
 	);
@@ -53,47 +55,26 @@ export const requestBackend = (
 	let backendUrl: string = '';
 	let siteList: string[] = [];
 	if (env.PUBLIC_ENVIRONMENT === 'test') {
-		backendUrl = 'https://locator-dev.bbmri-eric.eu/backend';
-		siteList = ['lodz-test', 'uppsala-test', 'eric-test', 'prague-uhkt-test'];
+		//backendUrl = 'http://localhost/backend/';
+		backendUrl = 'http://localhost/';
+		siteList = ['udi-test'];
 	} else if (env.PUBLIC_ENVIRONMENT === 'acceptance') {
-		backendUrl = 'https://locator-acc.bbmri-eric.eu/backend/';
-		siteList = [];
+		//backendUrl = 'http://localhost/backend/';
+		backendUrl = 'http://localhost/';
+		siteList = ['udi-test'];
 	} else {
 		// production
-		backendUrl = 'https://locator.bbmri-eric.eu/backend/';
-		siteList = [
-			'aachen',
-			'augsburg',
-			'berlin',
-			'brno',
-			'brno-recetox',
-			'cyprus',
-			'dresden',
-			'frankfurt',
-			'goettingen',
-			'hannover',
-			'heidelberg',
-			'hradec-kralove',
-			'luebeck',
-			'mannheim',
-			'marburg',
-			'muenchen-hmgu',
-			'naples-pascale',
-			'olomouc',
-			'pilsen',
-			'prague-ffm',
-			'prague-ior',
-			'prague-uhkt',
-			'regensburg',
-			'rome',
-			'rome-opbg',
-			'uppsala',
-			'wuerzburg'
-		];
+		//backendUrl = 'http://localhost/backend/';
+		backendUrl = 'http://localhost/';
+		siteList = ['udi-test'];
 	}
 	if (env.PUBLIC_BACKEND_URL) {
 		backendUrl = env.PUBLIC_BACKEND_URL;
 	}
+	console.log('requestBackend: Backend URL: ' + backendUrl);
+	console.log('requestBackend: Sites: ' + siteList);
 	const backend = new Spot(new URL(backendUrl), siteList, queryId);
+	console.log('requestBackend: send to backend');
 	backend.send(btoa(decodeURI(JSON.stringify(query))), updateResponse, abortController);
+	console.log('requestBackend: exiting');
 };
