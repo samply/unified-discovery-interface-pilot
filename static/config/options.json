@@ -23,16 +23,16 @@
     },
     "catalogueKeyToResponseKeyMap": [
         [
-            "Gender",
-            "Gender"
+            "gender",
+            "gender"
         ],
         [
-            "Ethnicity",
-            "Ethnicity"
+            "age_at_diagnosis",
+            "Age"
         ],
         [
-            "variant_name",
-            "variant_name"
+            "diagnosis",
+            "diagnosis"
         ],
         [
             "sample_kind",

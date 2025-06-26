@@ -76,7 +76,6 @@
 	 */
 	if (browser) {
 		window.addEventListener('emit-lens-query', (e) => {
-			console.log('Search button clicked!');
 			if (!dataPasser) return;
 
 			const event = e as CustomEvent;
@@ -84,7 +83,6 @@
 			const criteria: string[] = dataPasser.getCriteriaAPI('diagnosis');
 
 			requestBackend(ast, updateResponse, abortController, measures, criteria);
-			console.log('App: requestBackend completed');
 		});
 	}
 </script>
@@ -145,7 +143,7 @@
 				>
 					<lens-chart
 						title="Gender Distribution"
-						catalogueGroupCode="Gender"
+						catalogueGroupCode="gender"
 						chartType="pie"
 						displayLegends="{true}"
 						xAxisTitle="Gender signifier"

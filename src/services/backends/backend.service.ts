@@ -19,8 +19,6 @@ export const requestBackend = (
 	measureGroups: MeasureGroup[],
 	criteria: string[]
 ) => {
-	console.log('requestBackend: Sites: entered');
-
 	const measures: Measure[] = measureGroups[0].measures.map(
 		(measureItem: MeasureItem) => measureItem.measure
 	);
@@ -71,10 +69,6 @@ export const requestBackend = (
 	if (env.PUBLIC_BACKEND_URL) {
 		backendUrl = env.PUBLIC_BACKEND_URL;
 	}
-	console.log('requestBackend: Backend URL: ' + backendUrl);
-	console.log('requestBackend: Sites: ' + siteList);
 	const backend = new Spot(new URL(backendUrl), siteList, queryId);
-	console.log('requestBackend: send to backend');
 	backend.send(btoa(decodeURI(JSON.stringify(query))), updateResponse, abortController);
-	console.log('requestBackend: exiting');
 };
