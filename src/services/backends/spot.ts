@@ -25,11 +25,11 @@ export class Spot {
 	): Promise<void> {
 		console.log(`send: entered, query: ${query}`);
 		console.log(`send: entered, atob(query): ${atob(query)}`);
-		let query1 = JSON.parse(atob(query));
+		const query1 = JSON.parse(atob(query));
 		console.log(`send: entered, query1: ${query1}`);
-		let ast = query1.payload;
+		const ast = query1.payload;
 		console.log(`send: ast: ${ast}`);
-		let decodedAst = atob(ast);
+		const decodedAst = atob(ast);
 		console.log(`send: decodedAst: ${decodedAst}`);
 		try {
 			console.log(`send: fetch, this.url: ${this.url}`);
