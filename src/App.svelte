@@ -104,14 +104,14 @@
 			<div>
 				<AiSearchField />
 				<lens-search-bar
-					noMatchesFoundMessage="{'No information found'}"
-					placeholderText="{'Culumulative query'}"
+					noMatchesFoundMessage={'No information found'}
+					placeholderText={'Culumulative query'}
 				></lens-search-bar>
 			</div>
 			<div class="button-container">
 				<lens-info-button
 					noQueryMessage="Query with no criteria selected: Searches for all collections."
-					showQuery="{true}"
+					showQuery={true}
 				></lens-info-button>
 				<lens-search-button title="Search"></lens-search-button>
 			</div>
@@ -124,8 +124,8 @@
 				     for v0.5.0-alpha, but doing that causes a runtime error. -->
 				<lens-catalogue
 					infoIconUrl="info-circle-svgrepo-com.svg"
-					texts="{catalogueText}"
-					toggle="{{ collapsable: catalogueCollapsable, open: catalogueopen }}"
+					texts={catalogueText}
+					toggle={{ collapsable: catalogueCollapsable, open: catalogueopen }}
 				></lens-catalogue>
 			</div>
 		</div>
@@ -137,15 +137,25 @@
 
 			<div class="chart-wrapper chart-double-width">
 				<Linker
+					title="Directory"
+					sampleCount={250000}
+					browseLink="https://directory.bbmri-eric.eu"
+				>
+					<!-- <img src="/DirectoryMock.png" alt="Directory" style="width: 200px; height: auto;" /> -->
+					<img src="/DirectoryMock.png" alt="Directory" />
+				</Linker>
+			</div>
+			<div class="chart-wrapper chart-double-width">
+				<Linker
 					title="Locator"
-					sampleCount="{3500}"
+					sampleCount={3500}
 					browseLink="https://locator.bbmri-eric.eu/"
 				>
 					<lens-chart
 						title="Gender Distribution"
 						catalogueGroupCode="gender"
 						chartType="pie"
-						displayLegends="{true}"
+						displayLegends={true}
 						xAxisTitle="Gender signifier"
 						yAxisTitle="Number of patients"
 					></lens-chart>
@@ -153,20 +163,10 @@
 						title="Age Distribution"
 						catalogueGroupCode="age_at_diagnosis"
 						chartType="bar"
-						displayLegends="{true}"
-						groupRange="{10}"
+						displayLegends={true}
+						groupRange={10}
 						filterRegex="^(1*[12]*[0-9])"
 					></lens-chart>
-				</Linker>
-			</div>
-			<div class="chart-wrapper chart-double-width">
-				<Linker
-					title="Directory"
-					sampleCount="{250000}"
-					browseLink="https://directory.bbmri-eric.eu"
-				>
-					<!-- <img src="/DirectoryMock.png" alt="Directory" style="width: 200px; height: auto;" /> -->
-					<img src="/DirectoryMock.png" alt="Directory" />
 				</Linker>
 			</div>
 		</div>
@@ -193,4 +193,4 @@
 	System error: {someError.message}
 {/await}
 
-<lens-data-passer bind:this="{dataPasser}"></lens-data-passer>
+<lens-data-passer bind:this={dataPasser}></lens-data-passer>

@@ -24,7 +24,7 @@
 		"@commitlint/config-conventional": "^19.1.0",
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/kit": "^2.0.0",
-		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@sveltejs/vite-plugin-svelte": "^4.0.4",
 		"@types/eslint": "^8.56.0",
 		"@types/uuid": "^10.0.0",
 		"@typescript-eslint/eslint-plugin": "^7.7.1",
@@ -36,7 +36,7 @@
 		"lint-staged": "^15.2.2",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
-		"svelte": "^4.2.7",
+		"svelte": "^5.34.8",
 		"svelte-check": "^3.6.0",
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
@@ -47,6 +47,7 @@
 	"dependencies": {
 		"@samply/lens": "0.5.3",
 		"@sveltejs/adapter-node": "^5.2.9",
+		"ajv": "^8.17.1",
 		"chrono-node": "^2.8.2",
 		"uuid": "^11.1.0"
 	}

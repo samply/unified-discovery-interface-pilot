@@ -88,34 +88,27 @@
             }
         },
         "sample_kind": {
-            "hintText": [
-                "Verteilung der Probentypen die mit den identifizierten Patienten verbunden sind."
-            ],
-            "accumulatedValues": [
-                {
-                    "name": "ffpe-tissue",
-                    "values": [
-                        "tissue-ffpe",
-                        "tumor-tissue-ffpe",
-                        "normal-tissue-ffpe",
-                        "other-tissue-ffpe"
-                    ]
-                },
-                {
-                    "name": "frozen-tissue",
-                    "values": [
-                        "tissue-frozen",
-                        "tumor-tissue-frozen",
-                        "normal-tissue-frozen",
-                        "other-tissue-frozen"
-                    ]
-                }
-            ],
             "tooltips": {
-                "derivative-other": "Derivat, Andere"
-            },
-            "legendMapping":{
-                "derivative-other": "Derivat, Andere"
+                "tissue-ffpe": "Tissue (FFPE)",
+                "tissue-frozen": "Tissue snap frozen",
+                "tissue-other": "Other tissue storage",
+                "whole-blood": "Whole blood",
+                "blood-serum": "Serum",
+                "blood-plasma": "Plasma",
+                "buffy-coat": "Buffy coat",
+                "peripheral-blood-cells-vitals": "Peripheral blood cells",
+                "dried-whole-blood": "Dried whole blood",
+                "swab": "Swab",
+                "ascites": "Ascites",
+                "stool-faeces": "Faeces",
+                "urine": "Urine",
+                "csf-liquor": "Liquor/CSF",
+                "bone-marrow": "Bone marrow",
+                "saliva": "Saliva",
+                "liquid-other": "Other liquid biosample",
+                "dna": "DNA",
+                "rna": "RNA",
+                "derivative-other": "Other derivative"
             }
         }
     },
@@ -126,31 +119,29 @@
                 "dataKey": "site"
             },
             {
-                "title": "Variants",
-                "dataKey": "variants"
+                "title": "Patients",
+                "dataKey": "patient"
             },
             {
-                "title": "Cohorts",
-                "dataKey": "cohorts"
+                "title": "Specimens",
+                "dataKey": "specimen"
+            }
+        ]
+    },
+    "resultSummaryOptions": {
+        "title": "Results",
+        "infoButtonText": "To make re-identification more difficult, results of each site are modified slightly and rounded. If a location reports no match, zero is displayed for that location.",
+        "dataTypes": [
+            {
+                "title": "Sites",
+                "dataKey": "collections"
             },
             {
-                "title": "Runs",
-                "dataKey": "runs"
+                "title": "Patients",
+                "dataKey": "patient"
             },
             {
-                "title": "Datasets",
-                "dataKey": "datasets"
-            },
-            {
-                "title": "Analyses",
-                "dataKey": "analyses"
-            },
-            {
-                "title": "Individuals",
-                "dataKey": "individuals"
-            },
-            {
-                "title": "Biosamples",
+                "title": "Specimens",
                 "dataKey": "specimen"
             }
         ]
