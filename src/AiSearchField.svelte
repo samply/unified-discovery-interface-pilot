@@ -48,10 +48,10 @@
 
 <textarea
 	class="search-field"
-	bind:value="{searchText}"
+	bind:value={searchText}
 	placeholder="Type a free-text query and press Enter..."
 	rows="4"
-	on:keypress="{handleKeyPress}"
+	on:keypress={handleKeyPress}
 ></textarea>
 
 {#if loading}
