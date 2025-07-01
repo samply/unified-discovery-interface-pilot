@@ -81,7 +81,7 @@
 		}
 		return population;
 	};
-	
+
 	/**
 	 * @param site - data of the responding site
 	 * @param code - the code to search for
@@ -111,12 +111,18 @@
 			requestBackend(ast, updateResponse, abortController, measures, criteria);
 
 			// Get site count
-			console.log('Initial site count: ', getAggregatedPopulation(dataPasser.getResponseAPI(), 'collection').toString());
+			console.log(
+				'Initial site count: ',
+				getAggregatedPopulation(dataPasser.getResponseAPI(), 'collection').toString()
+			);
 			(async () => {
-				console.log("Waiting ...");
-				await new Promise(resolve => setTimeout(resolve, 10000));
-				console.log("Done waiting!");
-				console.log('Final site count: ', getAggregatedPopulation(dataPasser.getResponseAPI(), 'collection').toString());
+				console.log('Waiting ...');
+				await new Promise((resolve) => setTimeout(resolve, 10000));
+				console.log('Done waiting!');
+				console.log(
+					'Final site count: ',
+					getAggregatedPopulation(dataPasser.getResponseAPI(), 'collection').toString()
+				);
 				const responseStore = dataPasser.getResponseAPI();
 				console.log('responseStore: ', responseStore);
 			})();
