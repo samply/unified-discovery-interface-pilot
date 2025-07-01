@@ -1,11 +1,11 @@
 /**
- * Sends a query to Beam via the Spot backend and updates the store with the results.
+ * Sends a query to the Directory and updates the store with the results.
  */
 
 import type { ResponseStore, SiteData, BeamResult } from '@samply/lens';
 import { showErrorToast, translate } from '@samply/lens';
 
-export class Spot {
+export class Directory {
 	constructor(
 		private url: URL,
 		private sites: Array<string>,
@@ -13,7 +13,7 @@ export class Spot {
 	) {}
 
 	/**
-	 * sends the query to beam and updates the store with the results
+	 * sends the query to the Directory and updates the store with the results
 	 * @param query the query as base64 encoded string
 	 * @param updateResponse the function to update the response store
 	 * @param controller the abort controller to cancel the request

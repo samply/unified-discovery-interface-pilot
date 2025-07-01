@@ -9,7 +9,7 @@
 	<div class="top-section">
 		<h2>{title}</h2>
 		<span>Total Samples: {sampleCount}</span>
-		<a href="{browseLink}" target="_blank">
+		<a href={browseLink} target="_blank">
 			<button class="browse-button">Browse</button>
 		</a>
 	</div>
