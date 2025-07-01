@@ -53,7 +53,7 @@
 	if (browser) import('@samply/lens');
 
 	import { measures } from './config/environment';
-	import type { LensDataPasser } from '@samply/lens';
+	import type { LensDataPasser, ResponseStore, SiteData } from '@samply/lens';
 	import { catalogueText, fetchData } from './services/catalogue.service';
 	import { requestBackend } from './services/backends/backend.service';
 	import MyResultSummaryComponent from './MyResultSummaryComponent.wc.svelte';
@@ -72,6 +72,31 @@
 
 	let dataPasser: LensDataPasser;
 
+	const getAggregatedPopulation = (store: ResponseStore, code: string): number => {
+		let population = 0;
+		for (const site of store.values()) {
+			if (site.status === 'succeeded') {
+				population += getSitePopulationForCode(site.data, code);
+			}
+		}
+		return population;
+	};
+	
+	/**
+	 * @param site - data of the responding site
+	 * @param code - the code to search for
+	 * @returns the population count for a given code at a given site
+	 */
+	export const getSitePopulationForCode = (site: SiteData, code: string): number => {
+		let population = 0;
+		for (const group of site.group) {
+			if (group.code.text === code) {
+				population += group.population[0].count;
+			}
+		}
+		return population;
+	};
+
 	/**
 	 * This event listener is triggered when the user clicks the search button
 	 */
@@ -84,6 +109,17 @@
 			const criteria: string[] = dataPasser.getCriteriaAPI('diagnosis');
 
 			requestBackend(ast, updateResponse, abortController, measures, criteria);
+
+			// Get site count
+			console.log('Initial site count: ', getAggregatedPopulation(dataPasser.getResponseAPI(), 'collection').toString());
+			(async () => {
+				console.log("Waiting ...");
+				await new Promise(resolve => setTimeout(resolve, 10000));
+				console.log("Done waiting!");
+				console.log('Final site count: ', getAggregatedPopulation(dataPasser.getResponseAPI(), 'collection').toString());
+				const responseStore = dataPasser.getResponseAPI();
+				console.log('responseStore: ', responseStore);
+			})();
 		});
 	}
 </script>
