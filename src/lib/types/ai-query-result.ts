@@ -146,7 +146,7 @@ export class AiQueryResult {
 	}
 
 	// Functions for terms relevant to the Directory
-	
+
 	public getCountry(): string[] | null {
 		if (!this.validateField('country', 'string[]')) return null;
 		return this.country;

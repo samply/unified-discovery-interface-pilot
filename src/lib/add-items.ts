@@ -136,16 +136,16 @@ export class AddItems {
 	 * @param strings The array of strings to count words in.
 	 */
 	private static countWordsInItems(strings: string[]): number {
-	// Step 1: Replace hyphens with spaces in each string
-	const cleaned = strings.map(str => str.replace(/-/g, ' '));
+		// Step 1: Replace hyphens with spaces in each string
+		const cleaned = strings.map((str) => str.replace(/-/g, ' '));
 
-	// Step 2: Concatenate all strings with single spaces
-	const combined = cleaned.join(' ');
+		// Step 2: Concatenate all strings with single spaces
+		const combined = cleaned.join(' ');
 
-	// Step 3: Split on whitespace and filter out empty entries
-	const words = combined.trim().split(/\s+/);
+		// Step 3: Split on whitespace and filter out empty entries
+		const words = combined.trim().split(/\s+/);
 
-	return words.length;
+		return words.length;
 	}
 
 	private static singleSelect(item: string | null, key: string, name: string): void {

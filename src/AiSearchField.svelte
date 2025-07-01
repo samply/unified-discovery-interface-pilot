@@ -34,7 +34,10 @@
 				AddItems.gender(aiQueryResult.getGender());
 				AddItems.sampleType(aiQueryResult.getSampleType(), searchTextWordCount);
 				AddItems.diagnosis(aiQueryResult.getDiagnosis(), searchTextWordCount);
-				AddItems.storageTemperature(aiQueryResult.getSampleStorageTemperature(), searchTextWordCount);
+				AddItems.storageTemperature(
+					aiQueryResult.getSampleStorageTemperature(),
+					searchTextWordCount
+				);
 				AddItems.ageAtDiagnosis(aiQueryResult.getAgeAtDiagnosis());
 				AddItems.patientAge(aiQueryResult.getPatientAge());
 				AddItems.dateOfDiagnosis(aiQueryResult.getDateOfDiagnosis());
