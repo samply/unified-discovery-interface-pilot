@@ -145,6 +145,8 @@ export class AiQueryResult {
 		return true;
 	}
 
+	// Functions for terms relevant to the Directory
+	
 	public getCountry(): string[] | null {
 		if (!this.validateField('country', 'string[]')) return null;
 		return this.country;
@@ -164,6 +166,8 @@ export class AiQueryResult {
 		if (!this.validateField('service_type', 'string[]')) return null;
 		return this.service_type;
 	}
+
+	// Functions relevant for terms relevant to the Locator
 
 	/**
 	 * Returns the normalized gender of the donor, if it can be parsed, or null if not.
@@ -319,17 +323,17 @@ export class AiQueryResult {
 		return { lower: parsedLower, upper: parsedUpper };
 	}
 
-	private parseDate(raw: string): Date | null {
-		if (raw && typeof raw === 'string') {
-			const match = raw.match(/\b(19|20)\d{2}\b/); // Match 4-digit years from 1900–2099
+	// private parseDate(raw: string): Date | null {
+	// 	if (raw && typeof raw === 'string') {
+	// 		const match = raw.match(/\b(19|20)\d{2}\b/); // Match 4-digit years from 1900–2099
 
-			if (match) {
-				const year = match[0];
-				raw = `1 January ${year}`;
-			}
-		}
-		return raw ? chrono.parseDate(raw) : null;
-	}
+	// 		if (match) {
+	// 			const year = match[0];
+	// 			raw = `1 January ${year}`;
+	// 		}
+	// 	}
+	// 	return raw ? chrono.parseDate(raw) : null;
+	// }
 
 	/**
 	 * Returns the parsed sampling date range from the "sampling_date" field.

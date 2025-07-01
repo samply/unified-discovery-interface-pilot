@@ -28,18 +28,21 @@
 				console.log('Category:', aiQueryResult.getCategory());
 				console.log('Service Type:', aiQueryResult.getServiceType());
 
+				// Find the number of words in the searchText string
+				const searchTextWordCount = searchText.trim().split(/\s+/).length;
+
 				AddItems.gender(aiQueryResult.getGender());
-				AddItems.sampleType(aiQueryResult.getSampleType());
-				AddItems.diagnosis(aiQueryResult.getDiagnosis());
-				AddItems.storageTemperature(aiQueryResult.getSampleStorageTemperature());
+				AddItems.sampleType(aiQueryResult.getSampleType(), searchTextWordCount);
+				AddItems.diagnosis(aiQueryResult.getDiagnosis(), searchTextWordCount);
+				AddItems.storageTemperature(aiQueryResult.getSampleStorageTemperature(), searchTextWordCount);
 				AddItems.ageAtDiagnosis(aiQueryResult.getAgeAtDiagnosis());
 				AddItems.patientAge(aiQueryResult.getPatientAge());
 				AddItems.dateOfDiagnosis(aiQueryResult.getDateOfDiagnosis());
 				AddItems.samplingDate(aiQueryResult.getSamplingDate());
-				AddItems.country(aiQueryResult.getCountry());
-				AddItems.collectionType(aiQueryResult.getCollectionType());
-				AddItems.category(aiQueryResult.getCategory());
-				AddItems.serviceType(aiQueryResult.getServiceType());
+				AddItems.country(aiQueryResult.getCountry(), searchTextWordCount);
+				AddItems.collectionType(aiQueryResult.getCollectionType(), searchTextWordCount);
+				AddItems.category(aiQueryResult.getCategory(), searchTextWordCount);
+				AddItems.serviceType(aiQueryResult.getServiceType(), searchTextWordCount);
 			}
 			loading = false;
 		}
