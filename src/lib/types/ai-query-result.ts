@@ -321,7 +321,10 @@ export class AiQueryResult {
 	 *
 	 * @returns {{ lower: Date | null; upper: Date | null } | null}
 	 */
-	public getSamplingDate(): { lower: Date | null; upper: Date | null } | null | EmptyObject {
+	public getSamplingDate():
+		| { lower: Date | null; upper: Date | null }
+		| null
+		| EmptyObject {
 		const diagnosisDate = this.parseDateRange('date_of_diagnosis');
 		const samplingDate = this.parseDateRange('sampling_date');
 
@@ -449,7 +452,7 @@ export class AiQueryResult {
 	 * @returns True if the age range is empty, false otherwise.
 	 */
 	private isEmptyAgeRange(ageRange: AgeRange): boolean {
-		return !ageRange || ageRange.lower === null && ageRange.upper === null;
+		return !ageRange || (ageRange.lower === null && ageRange.upper === null);
 	}
 
 	/**
@@ -458,7 +461,7 @@ export class AiQueryResult {
 	 * If the age range is valid, returns an object with
 	 * "lower" and "upper" properties, each holding the
 	 * respective age value (or null if not applicable).
-	 * 
+	 *
 	 * If there is no diagnosis and no patient age range, but a diagnosis age is available,
 	 * return that.
 	 *
@@ -471,7 +474,11 @@ export class AiQueryResult {
 		const patientAge = this.parseAgeRange('patient_age');
 		const diagnosisAge = this.parseAgeRange('age_at_diagnosis');
 
-		if (!this.hasDiagnosis() && this.isEmptyAgeRange(patientAge) && !this.isEmptyAgeRange(diagnosisAge)) {
+		if (
+			!this.hasDiagnosis() &&
+			this.isEmptyAgeRange(patientAge) &&
+			!this.isEmptyAgeRange(diagnosisAge)
+		) {
 			return diagnosisAge;
 		}
 
