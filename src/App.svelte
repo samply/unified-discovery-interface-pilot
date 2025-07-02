@@ -4,7 +4,6 @@
 	import { onMount } from 'svelte';
 	import Linker from './Linker.svelte';
 	import AiSearchField from './AiSearchField.svelte';
-	//import { queryStore } from "@samply/lens";
 
 	// If a results table cell contains "-1", it means that the cell is empty,
 	// so we replace it with "-". This is done inside the shadow DOM of the
@@ -56,7 +55,6 @@
 	import type { LensDataPasser, ResponseStore, SiteData } from '@samply/lens';
 	import { catalogueText, fetchData } from './services/catalogue.service';
 	import { requestBackend } from './services/backends/backend.service';
-	import MyResultSummaryComponent from './MyResultSummaryComponent.wc.svelte';
 
 	// Always show catalog hierarchy
 	let catalogueopen = true;
@@ -115,17 +113,17 @@
 				'Initial site count: ',
 				getAggregatedPopulation(dataPasser.getResponseAPI(), 'collection').toString()
 			);
-			(async () => {
-				console.log('Waiting ...');
-				await new Promise((resolve) => setTimeout(resolve, 10000));
-				console.log('Done waiting!');
-				console.log(
-					'Final site count: ',
-					getAggregatedPopulation(dataPasser.getResponseAPI(), 'collection').toString()
-				);
-				const responseStore = dataPasser.getResponseAPI();
-				console.log('responseStore: ', responseStore);
-			})();
+			// (async () => {
+			// 	console.log('Waiting ...');
+			// 	await new Promise((resolve) => setTimeout(resolve, 10000));
+			// 	console.log('Done waiting!');
+			// 	console.log(
+			// 		'Final site count: ',
+			// 		getAggregatedPopulation(dataPasser.getResponseAPI(), 'collection').toString()
+			// 	);
+			// 	const responseStore = dataPasser.getResponseAPI();
+			// 	console.log('responseStore: ', responseStore);
+			// })();
 		});
 	}
 </script>
@@ -178,12 +176,6 @@
 			<!-- the stratifier to the catalogueGroupCode for the chart. You need to do this -->
 			<!-- even if code and catalogueGroupCode are the same. -->
 
-			<div class="chart-wrapper result-summary">
-				<MyResultSummaryComponent></MyResultSummaryComponent>
-			</div>
-			<div class="chart-wrapper result-summary">
-				<lens-result-summary></lens-result-summary>
-			</div>
 			<div class="chart-wrapper chart-double-width">
 				<Linker
 					title="Directory"
