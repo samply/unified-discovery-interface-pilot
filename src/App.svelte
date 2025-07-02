@@ -190,7 +190,6 @@
 					sampleCount={250000}
 					browseLink="https://directory.bbmri-eric.eu"
 				>
-					<!-- <img src="/DirectoryMock.png" alt="Directory" style="width: 200px; height: auto;" /> -->
 					<img src="/DirectoryMock.png" alt="Directory" />
 				</Linker>
 			</div>
@@ -200,6 +199,9 @@
 					sampleCount={3500}
 					browseLink="https://locator.bbmri-eric.eu/"
 				>
+				    <span slot="sample-info">
+        				<lens-result-summary></lens-result-summary>
+    				</span>
 					<lens-chart
 						title="Gender Distribution"
 						catalogueGroupCode="gender"
