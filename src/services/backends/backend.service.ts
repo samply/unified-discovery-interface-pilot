@@ -9,6 +9,7 @@ import {
 import { Spot } from './spot';
 import { env } from '$env/dynamic/public';
 import { v4 as uuidv4 } from 'uuid';
+import { Directory } from './directory';
 
 export const requestBackend = (
 	ast: AstTopLayer,
@@ -21,7 +22,7 @@ export const requestBackend = (
 	const newAst = resolveAstSubCategories(ast);
 	const { spotAst, directoryAst } = splitAst(newAst);
 	console.log('requestBackend: directoryAst', directoryAst);
-	const query = {
+	const spotQuery = {
 		lang: 'ast',
 		payload: btoa(
 			decodeURI(
@@ -32,30 +33,52 @@ export const requestBackend = (
 			)
 		)
 	};
+	const directoryQuery = {
+		lang: 'ast',
+		payload: btoa(
+			decodeURI(
+				JSON.stringify({
+					ast: directoryAst,
+					id: queryId.concat('__search__').concat(queryId)
+				})
+			)
+		)
+	};
 
 	console.log('requestBackend: measureGroups', measureGroups, 'criteria', criteria);
 
 	let spotUrl: string = '';
 	let locatorSiteList: string[] = [];
+	let directoryUrl: string = '';
+	let directorySiteList: string[] = [];
 	if (env.PUBLIC_ENVIRONMENT === 'test') {
-		//backendUrl = 'http://localhost/backend/';
 		spotUrl = 'http://localhost/';
+		directoryUrl = 'http://localhost:8080/';
 		locatorSiteList = ['udi-test'];
+		directorySiteList = [];
 	} else if (env.PUBLIC_ENVIRONMENT === 'acceptance') {
-		//backendUrl = 'http://localhost/backend/';
 		spotUrl = 'http://localhost/';
+		directoryUrl = 'http://localhost:8080/';
 		locatorSiteList = ['udi-test'];
+		directorySiteList = [];
 	} else {
 		// production
-		//backendUrl = 'http://localhost/backend/';
 		spotUrl = 'http://localhost/';
+		directoryUrl = 'http://localhost:8080/';
+		directorySiteList = [];
 		locatorSiteList = ['udi-test'];
 	}
 	if (env.PUBLIC_BACKEND_URL) {
 		spotUrl = env.PUBLIC_BACKEND_URL;
 	}
 	const spot = new Spot(new URL(spotUrl), locatorSiteList, queryId);
-	spot.send(btoa(decodeURI(JSON.stringify(query))), updateResponse, abortController);
+	spot.send(btoa(decodeURI(JSON.stringify(spotQuery))), updateResponse, abortController);
+	const directory = new Directory(new URL(directoryUrl), directorySiteList, queryId);
+	directory.send(
+		btoa(decodeURI(JSON.stringify(directoryQuery))),
+		updateResponse,
+		abortController
+	);
 };
 
 const SPOT_KEYS = new Set([

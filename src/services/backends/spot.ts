@@ -42,11 +42,13 @@ export class Spot {
 			);
 			if (!beamTaskResponse.ok) {
 				const error = await beamTaskResponse.text();
-				console.debug(`Received ${beamTaskResponse.status} with message ${error}`);
+				console.debug(
+					`Spot.send: Received ${beamTaskResponse.status} with message ${error}`
+				);
 				throw new Error(`Unable to create new beam task.`);
 			}
 
-			console.info(`Created new Beam Task with id ${this.currentTask}`);
+			console.info(`Spot.send: Created new Beam Task with id ${this.currentTask}`);
 
 			const eventSource = new EventSource(
 				`${this.url.toString()}beam/${this.currentTask}?wait_count=${this.sites.length}`,
@@ -95,7 +97,7 @@ export class Spot {
 			// };
 		} catch (err) {
 			if (err instanceof Error && err.name === 'AbortError') {
-				console.log(`Aborting request ${this.currentTask}`);
+				console.log(`Spot.send: Aborting request ${this.currentTask}`);
 			} else {
 				console.error(err);
 				showErrorToast(translate('network_error'));
