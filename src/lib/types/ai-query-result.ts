@@ -216,7 +216,6 @@ export class AiQueryResult {
 
 		for (const entry of originalEntries) {
 			if (typeof entry !== 'string') {
-				console.warn(`Non-string diagnosis entry encountered and ignored: ${entry}`);
 				continue;
 			}
 
@@ -224,13 +223,10 @@ export class AiQueryResult {
 
 			if (matches && matches.length > 0) {
 				validCodes.push(...matches);
-			} else {
-				console.warn(`No valid ICD-10 codes found in diagnosis entry: "${entry}"`);
 			}
 		}
 
 		if (originalEntries.length > 0 && validCodes.length === 0) {
-			console.error('All diagnosis entries were invalid or contained no ICD-10 codes.');
 			return null;
 		}
 
@@ -274,7 +270,6 @@ export class AiQueryResult {
 		}
 
 		if (original.length > 0 && valid.length === 0) {
-			console.error('All sample types were invalid or unrecognized.');
 			return null;
 		}
 
@@ -297,7 +292,6 @@ export class AiQueryResult {
 		const range = (this as Record<string, unknown>)[fieldName];
 
 		if (!range || typeof range !== 'object') {
-			console.error(`Field "${fieldName}" is missing or invalid.`);
 			return null;
 		}
 
@@ -314,26 +308,11 @@ export class AiQueryResult {
 		const parsedUpper = rawUpper ? chrono.parseDate(rawUpper) : null;
 
 		if (!parsedLower && !parsedUpper) {
-			console.error(
-				`Failed to parse any bounds for "${fieldName}". rawLower: ${rawLower}, rawUpper: ${rawUpper}`
-			);
 			return null;
 		}
 
 		return { lower: parsedLower, upper: parsedUpper };
 	}
-
-	// private parseDate(raw: string): Date | null {
-	// 	if (raw && typeof raw === 'string') {
-	// 		const match = raw.match(/\b(19|20)\d{2}\b/); // Match 4-digit years from 1900–2099
-
-	// 		if (match) {
-	// 			const year = match[0];
-	// 			raw = `1 January ${year}`;
-	// 		}
-	// 	}
-	// 	return raw ? chrono.parseDate(raw) : null;
-	// }
 
 	/**
 	 * Returns the parsed sampling date range from the "sampling_date" field.
@@ -342,8 +321,17 @@ export class AiQueryResult {
 	 *
 	 * @returns {{ lower: Date | null; upper: Date | null } | null}
 	 */
-	public getSamplingDate(): { lower: Date | null; upper: Date | null } | null {
-		return this.parseDateRange('sampling_date');
+	public getSamplingDate(): { lower: Date | null; upper: Date | null } | null | EmptyObject {
+		const diagnosisDate = this.parseDateRange('date_of_diagnosis');
+		const samplingDate = this.parseDateRange('sampling_date');
+
+		// If there is no diagnosis and no sampling date, but we have a diagnosis date,
+		// return the diagnosis date.
+		if (!this.hasDiagnosis() && diagnosisDate && !samplingDate) {
+			return diagnosisDate;
+		}
+
+		return samplingDate;
 	}
 
 	/**
@@ -361,12 +349,8 @@ export class AiQueryResult {
 		| { lower: Date | null; upper: Date | null }
 		| null
 		| EmptyObject {
-		const diagnosis = this.getDiagnosis();
 		const diagnosisDate = this.parseDateRange('date_of_diagnosis');
-		const samplingDate = this.getSamplingDate();
-
-		// If no diagnosis and date ranges are structurally equal, return empty object
-		const noDiagnosis = !diagnosis || diagnosis.length === 0;
+		const samplingDate = this.parseDateRange('sampling_date');
 
 		const datesAreEqual =
 			diagnosisDate &&
@@ -374,10 +358,8 @@ export class AiQueryResult {
 			diagnosisDate.lower?.getTime() === samplingDate.lower?.getTime() &&
 			diagnosisDate.upper?.getTime() === samplingDate.upper?.getTime();
 
-		if (noDiagnosis && datesAreEqual) {
-			console.warn(
-				'Diagnosis dates match sampling dates and no diagnosis exists. Returning empty object.'
-			);
+		// If no diagnosis is present, and date ranges are structurally equal, return empty object
+		if (!this.hasDiagnosis() && datesAreEqual) {
 			return {};
 		}
 
@@ -461,11 +443,24 @@ export class AiQueryResult {
 	}
 
 	/**
+	 * Returns true if the age range is either null or has both lower and upper bounds set to null.
+	 * Otherwise, returns false.
+	 * @param ageRange - The age range to check.
+	 * @returns True if the age range is empty, false otherwise.
+	 */
+	private isEmptyAgeRange(ageRange: AgeRange): boolean {
+		return !ageRange || ageRange.lower === null && ageRange.upper === null;
+	}
+
+	/**
 	 * Retrieves the age range from the "patient_age" field.
 	 * Returns null if the age range is invalid or missing.
 	 * If the age range is valid, returns an object with
 	 * "lower" and "upper" properties, each holding the
 	 * respective age value (or null if not applicable).
+	 * 
+	 * If there is no diagnosis and no patient age range, but a diagnosis age is available,
+	 * return that.
 	 *
 	 * @returns {{ lower: number | null; upper: number | null } | null}
 	 */
@@ -473,7 +468,24 @@ export class AiQueryResult {
 		| { lower: number | null; upper: number | null }
 		| EmptyObject
 		| null {
-		return this.parseAgeRange('patient_age');
+		const patientAge = this.parseAgeRange('patient_age');
+		const diagnosisAge = this.parseAgeRange('age_at_diagnosis');
+
+		if (!this.hasDiagnosis() && this.isEmptyAgeRange(patientAge) && !this.isEmptyAgeRange(diagnosisAge)) {
+			return diagnosisAge;
+		}
+
+		return patientAge;
+	}
+
+	/**
+	 * Checks if a diagnosis exists in the AI query result.
+	 *
+	 * @returns {boolean} True if a diagnosis exists, false otherwise.
+	 */
+	private hasDiagnosis(): boolean {
+		if (this.getDiagnosis() && this.getDiagnosis().length > 0) return true;
+		return false;
 	}
 
 	/**
@@ -490,13 +502,12 @@ export class AiQueryResult {
 		| { lower: number | null; upper: number | null }
 		| EmptyObject
 		| null {
-		const diagnosis = this.getDiagnosis();
-		if (!diagnosis || diagnosis.length === 0) {
+		if (!this.hasDiagnosis()) {
 			console.info('No diagnosis found — age at diagnosis will not be reported.');
 			return {};
 		}
 
-		const patientAge = this.getPatientAge();
+		const patientAge = this.parseAgeRange('patient_age');
 		const diagnosisAge = this.parseAgeRange('age_at_diagnosis');
 
 		// If both age ranges only specify one bound (say, just lower: 60) and they’re the
