@@ -8,7 +8,9 @@
 	<!-- Top Section (Title, Sample Count, Browse Button) -->
 	<div class="top-section">
 		<h2>{title}</h2>
-		<span>Total Samples: {sampleCount}</span>
+		<slot name="sample-info">
+			<span>Total Samples: {sampleCount}</span>
+		</slot>
 		<a href={browseLink} target="_blank">
 			<button class="browse-button">Browse</button>
 		</a>
