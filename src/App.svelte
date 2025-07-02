@@ -95,6 +95,10 @@
 		return population;
 	};
 
+	function getLocatorUrl(): string {
+		return "https://locator.bbmri-eric.eu/";
+	}
+
 	/**
 	 * This event listener is triggered when the user clicks the search button
 	 */
@@ -190,7 +194,7 @@
 				<Linker
 					title="Locator"
 					sampleCount={3500}
-					browseLink="https://locator.bbmri-eric.eu/"
+					browseLink={ getLocatorUrl() }
 				>
 					<span slot="sample-info">
 						<lens-result-summary></lens-result-summary>
