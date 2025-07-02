@@ -206,11 +206,7 @@
 			</div>
 			<div class="chart-wrapper chart-double-width">
 				<!-- Use Lens result summary component to display site count -->
-				<Linker
-					title="Locator"
-					sampleCount={3500}
-					browseLink={ locatorUrl }
-				>
+				<Linker title="Locator" sampleCount={3500} browseLink={locatorUrl}>
 					<span slot="sample-info">
 						<lens-result-summary></lens-result-summary>
 					</span>
