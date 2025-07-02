@@ -95,8 +95,20 @@
 		return population;
 	};
 
-	function getLocatorUrl(): string {
-		return "https://locator.bbmri-eric.eu/";
+	// Code to create a Locator URL with bundled query AST. Changes are triggered
+	// by a query.
+
+	let locatorUrl = 'https://locator.bbmri-eric.eu';
+
+	function getLocatorUrlFromAst(ast): string {
+		const query = btoa(JSON.stringify(ast));
+		const url: string = `https://locator.bbmri-eric.eu?query=${query}`;
+		return url;
+	}
+
+	function handleEmitLensQuery(event) {
+		const { ast } = event.detail;
+		locatorUrl = getLocatorUrlFromAst(ast);
 	}
 
 	/**
@@ -128,6 +140,9 @@
 			// 	const responseStore = dataPasser.getResponseAPI();
 			// 	console.log('responseStore: ', responseStore);
 			// })();
+
+			// Pass AST to Locator URL
+			handleEmitLensQuery(e);
 		});
 	}
 </script>
@@ -194,7 +209,7 @@
 				<Linker
 					title="Locator"
 					sampleCount={3500}
-					browseLink={ getLocatorUrl() }
+					browseLink={ locatorUrl }
 				>
 					<span slot="sample-info">
 						<lens-result-summary></lens-result-summary>
