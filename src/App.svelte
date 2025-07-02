@@ -110,7 +110,7 @@
 
 			requestBackend(ast, updateResponse, abortController, measures, criteria);
 
-			// Get site count
+			// Experiemnt to get site count (not yet working)
 			console.log(
 				'Initial site count: ',
 				getAggregatedPopulation(dataPasser.getResponseAPI(), 'collection').toString()
@@ -194,14 +194,15 @@
 				</Linker>
 			</div>
 			<div class="chart-wrapper chart-double-width">
+				<!-- Use Lens result summary component to display site count -->
 				<Linker
 					title="Locator"
 					sampleCount={3500}
 					browseLink="https://locator.bbmri-eric.eu/"
 				>
-				    <span slot="sample-info">
-        				<lens-result-summary></lens-result-summary>
-    				</span>
+					<span slot="sample-info">
+						<lens-result-summary></lens-result-summary>
+					</span>
 					<lens-chart
 						title="Gender Distribution"
 						catalogueGroupCode="gender"
