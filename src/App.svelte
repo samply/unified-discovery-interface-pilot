@@ -95,20 +95,14 @@
 		return population;
 	};
 
-	// Code to create a Locator URL with bundled query AST. Changes are triggered
-	// by a query.
+	// Code to create a Locator URL with bundled query. Changes are triggered by a search.
 
-	let locatorUrl = 'https://locator.bbmri-eric.eu';
+	let locatorUrl = 'https://locator.bbmri-eric.eu/search/';
 
-	function getLocatorUrlFromAst(ast): string {
-		const query = btoa(JSON.stringify(ast));
-		const url: string = `https://locator.bbmri-eric.eu?query=${query}`;
-		return url;
-	}
-
-	function handleEmitLensQuery(event) {
-		const { ast } = event.detail;
-		locatorUrl = getLocatorUrlFromAst(ast);
+	function updateLocatorUrl() {
+		const query = dataPasser.getQueryAPI();
+		const encodedQuery = btoa(JSON.stringify(query));
+		locatorUrl = `https://locator.bbmri-eric.eu/search/?query=${encodedQuery}`;
 	}
 
 	/**
@@ -142,7 +136,7 @@
 			// })();
 
 			// Pass AST to Locator URL
-			handleEmitLensQuery(e);
+			updateLocatorUrl();
 		});
 	}
 </script>
