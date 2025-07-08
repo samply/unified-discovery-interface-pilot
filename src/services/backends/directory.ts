@@ -38,5 +38,13 @@ export class Directory {
 				' this.currentTask: ' +
 				this.currentTask
 		);
+
+		// Convert query to a suitable intermediate format for relaying to Directory
+
+		// Send query to Directory
+
+		// Convert response to a format compatible with the response store.
+
+		// Update response store
 	}
 }

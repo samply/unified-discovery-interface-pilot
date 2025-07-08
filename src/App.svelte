@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import Linker from './Linker.svelte';
 	import AiSearchField from './AiSearchField.svelte';
+	import { buildDirectoryUrlFromAst } from '$lib/utils/ast-to-directory-url';
 
 	// If a results table cell contains "-1", it means that the cell is empty,
 	// so we replace it with "-". This is done inside the shadow DOM of the
@@ -96,13 +97,15 @@
 	};
 
 	// Code to create a Locator URL with bundled query. Changes are triggered by a search.
-
 	let locatorUrl = 'https://locator.bbmri-eric.eu/search/';
-
+	let directoryUrl = 'https://directory.bbmri-eric.eu';
 	function updateLocatorUrl() {
 		const query = dataPasser.getQueryAPI();
 		const encodedQuery = btoa(JSON.stringify(query));
 		locatorUrl = `https://locator.bbmri-eric.eu/search/?query=${encodedQuery}`;
+		console.log('locatorUrl: ', locatorUrl);
+		directoryUrl = buildDirectoryUrlFromAst(query, directoryUrl);
+		console.log('directoryUrl: ', directoryUrl);
 	}
 
 	/**
