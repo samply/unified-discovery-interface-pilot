@@ -3,7 +3,7 @@ import { type AstElement } from '@samply/lens';
 export function buildDirectoryUrlFromAst(ast: AstElement, baseUrl: string): string {
 	const params = extractParamsFromAst(ast);
 	const queryString = buildQueryString(params);
-	return `${baseUrl.replace(/\/+$/, '')}/#/catalogue?${queryString}`;
+	return `${baseUrl.replace(/\/+$/, '')}?${queryString}`;
 }
 
 // Mapping from AST keys to query parameter names

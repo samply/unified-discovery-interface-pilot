@@ -96,16 +96,18 @@
 		return population;
 	};
 
-	// Code to create a Locator URL with bundled query. Changes are triggered by a search.
-	let locatorUrl = 'https://locator.bbmri-eric.eu/search/';
-	let directoryUrl = 'https://directory.bbmri-eric.eu';
-	function updateLocatorUrl() {
+	// Code to create search field URLs with bundled queries. Changes are triggered by a search.
+	const locatorBaseUrl = 'https://locator.bbmri-eric.eu/search/'; // TODO: put into an env var
+	let locatorUrl = locatorBaseUrl;
+	const directoryBaseUrl = 'https://directory.bbmri-eric.eu/ERIC/directory/#/catalogue'; // TODO: put into an env var
+	let directoryUrl = directoryBaseUrl;
+	function updateSearchFieldUrls(event) {
 		const query = dataPasser.getQueryAPI();
 		const encodedQuery = btoa(JSON.stringify(query));
-		locatorUrl = `https://locator.bbmri-eric.eu/search/?query=${encodedQuery}`;
-		console.log('locatorUrl: ', locatorUrl);
-		directoryUrl = buildDirectoryUrlFromAst(query, directoryUrl);
-		console.log('directoryUrl: ', directoryUrl);
+		locatorUrl = `${locatorBaseUrl}?query=${encodedQuery}`;
+		
+		const { ast } = event.detail;
+		directoryUrl = buildDirectoryUrlFromAst(ast, directoryBaseUrl);
 	}
 
 	/**
@@ -138,8 +140,8 @@
 			// 	console.log('responseStore: ', responseStore);
 			// })();
 
-			// Pass AST to Locator URL
-			updateLocatorUrl();
+			// Pass AST to search field URLs
+			updateSearchFieldUrls(e);
 		});
 	}
 </script>
@@ -196,7 +198,7 @@
 				<Linker
 					title="Directory"
 					sampleCount={250000}
-					browseLink="https://directory.bbmri-eric.eu"
+					browseLink={directoryUrl}
 				>
 					<img src="/DirectoryMock.png" alt="Directory" />
 				</Linker>
