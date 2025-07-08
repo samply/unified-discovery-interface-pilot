@@ -105,7 +105,7 @@
 		const query = dataPasser.getQueryAPI();
 		const encodedQuery = btoa(JSON.stringify(query));
 		locatorUrl = `${locatorBaseUrl}?query=${encodedQuery}`;
-		
+
 		const { ast } = event.detail;
 		directoryUrl = buildDirectoryUrlFromAst(ast, directoryBaseUrl);
 	}
@@ -195,11 +195,7 @@
 			<!-- even if code and catalogueGroupCode are the same. -->
 
 			<div class="chart-wrapper chart-double-width">
-				<Linker
-					title="Directory"
-					sampleCount={250000}
-					browseLink={directoryUrl}
-				>
+				<Linker title="Directory" sampleCount={250000} browseLink={directoryUrl}>
 					<img src="/DirectoryMock.png" alt="Directory" />
 				</Linker>
 			</div>
