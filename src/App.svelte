@@ -135,7 +135,6 @@
 		}
 	};
 
-
 	// This event listener is triggered when the user clicks the search button
 	if (browser) {
 		window.addEventListener('emit-lens-query', (e) => {
@@ -222,7 +221,11 @@
 			<!-- even if code and catalogueGroupCode are the same. -->
 
 			<div class="chart-wrapper chart-double-width">
-				<Linker title="Directory" sampleCount={directoryBiobankCount} browseLink={directoryUrl}>
+				<Linker
+					title="Directory"
+					sampleCount={directoryBiobankCount}
+					browseLink={directoryUrl}
+				>
 					<img src="/DirectoryMock.png" alt="Directory" />
 				</Linker>
 			</div>

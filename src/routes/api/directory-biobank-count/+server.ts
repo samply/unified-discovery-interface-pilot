@@ -13,31 +13,39 @@ const DIRECTORY_GRAPHQL_ENDPOINT = 'https://directory.bbmri-eric.eu/ERIC/api/gra
  * @returns {Promise<Response>} A JSON response containing either the count of biobanks or an error message.
  */
 export async function GET() {
-    const query = `query { Biobanks_agg { count } }`;
+	const query = `query { Biobanks_agg { count } }`;
 
-    try {
-        const jsonStringifiedQuery = JSON.stringify({ query });
+	try {
+		const jsonStringifiedQuery = JSON.stringify({ query });
 
-        const response = await fetch(DIRECTORY_GRAPHQL_ENDPOINT, {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json'
-            },
-            body: jsonStringifiedQuery
-        });
+		const response = await fetch(DIRECTORY_GRAPHQL_ENDPOINT, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: jsonStringifiedQuery
+		});
 
-        if (!response.ok) {
-            return json({ error: 'Failed to fetch from Directory API,  status: ' + response.status + ', URL' +  DIRECTORY_GRAPHQL_ENDPOINT + ', jsonStringifiedQuery: ' + jsonStringifiedQuery });
-        }
+		if (!response.ok) {
+			return json({
+				error:
+					'Failed to fetch from Directory API,  status: ' +
+					response.status +
+					', URL' +
+					DIRECTORY_GRAPHQL_ENDPOINT +
+					', jsonStringifiedQuery: ' +
+					jsonStringifiedQuery
+			});
+		}
 
-        const result = await response.json();
-        const count = result?.data?.Biobanks_agg.count ?? 0;
-        if (count != null) {
-            return json({ count });
-        }
+		const result = await response.json();
+		const count = result?.data?.Biobanks_agg.count ?? 0;
+		if (count != null) {
+			return json({ count });
+		}
 
-        return json({ error: 'Unknown error' });
-    } catch (error) {
-        return json({ error: 'Unexpected server error' }, { status: 500 });
-    }
+		return json({ error: 'Unknown error' });
+	} catch (error) {
+		return json({ error: 'Unexpected server error' }, { status: 500 });
+	}
 }
