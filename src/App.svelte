@@ -110,9 +110,33 @@
 		directoryUrl = buildDirectoryUrlFromAst(ast, directoryBaseUrl);
 	}
 
-	/**
-	 * This event listener is triggered when the user clicks the search button
-	 */
+	// Code to get stuff from the Directory
+	let directoryBiobankCount: number | null = null;
+	let error: string | null = null;
+	// Fetch Directory biobank count from your own server-side endpoint
+	const fetchDirectoryBiobankCount = async () => {
+		try {
+			const res = await fetch('/api/directory-biobank-count');
+			const data = await res.json();
+
+			console.log('fetchDirectoryBiobankCount: data: ', data);
+
+			if (res.ok) {
+				directoryBiobankCount = data.count;
+			} else {
+				error = 'Unknown error';
+				if (data.error) {
+					error = data.error;
+				}
+				console.log('fetchDirectoryBiobankCount: error: ', error);
+			}
+		} catch (e) {
+			error = 'Failed to fetch organization count';
+		}
+	};
+
+
+	// This event listener is triggered when the user clicks the search button
 	if (browser) {
 		window.addEventListener('emit-lens-query', (e) => {
 			if (!dataPasser) return;
@@ -123,7 +147,7 @@
 
 			requestBackend(ast, updateResponse, abortController, measures, criteria);
 
-			// Experiemnt to get site count (not yet working)
+			// Experiemnt to get site count (not yet working, using results summary component instead)
 			console.log(
 				'Initial site count: ',
 				getAggregatedPopulation(dataPasser.getResponseAPI(), 'collection').toString()
@@ -142,6 +166,9 @@
 
 			// Pass AST to search field URLs
 			updateSearchFieldUrls(e);
+
+			// Get Directory-related information
+			fetchDirectoryBiobankCount();
 		});
 	}
 </script>
@@ -195,7 +222,7 @@
 			<!-- even if code and catalogueGroupCode are the same. -->
 
 			<div class="chart-wrapper chart-double-width">
-				<Linker title="Directory" sampleCount={250000} browseLink={directoryUrl}>
+				<Linker title="Directory" sampleCount={directoryBiobankCount} browseLink={directoryUrl}>
 					<img src="/DirectoryMock.png" alt="Directory" />
 				</Linker>
 			</div>
