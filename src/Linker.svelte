@@ -9,7 +9,7 @@
 	<div class="top-section">
 		<h2>{title}</h2>
 		<slot name="sample-info">
-			<span>Total Samples: {sampleCount}</span>
+			<span>Total sites: {sampleCount}</span>
 		</slot>
 		<a href={browseLink} target="_blank">
 			<button class="browse-button">Browse</button>
