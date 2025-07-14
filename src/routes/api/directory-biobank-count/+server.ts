@@ -1,6 +1,9 @@
-import { json } from '@sveltejs/kit';
-
-const DIRECTORY_GRAPHQL_ENDPOINT = 'https://directory.bbmri-eric.eu/ERIC/api/graphql';
+import { json, type RequestHandler } from '@sveltejs/kit';
+import {
+	astToGraphqlFilter,
+	buildGraphqlQuery,
+	runGraphqlQuery
+} from '$lib/utils/ast-to-directory-graphql';
 
 /**
  * Handles a GET request to fetch the biobank organization count from a GraphQL API.
@@ -12,40 +15,32 @@ const DIRECTORY_GRAPHQL_ENDPOINT = 'https://directory.bbmri-eric.eu/ERIC/api/gra
  *
  * @returns {Promise<Response>} A JSON response containing either the count of biobanks or an error message.
  */
-export async function GET() {
-	const query = `query { Biobanks_agg { count } }`;
-
+export const GET: RequestHandler = async ({ url }) => {
 	try {
-		const jsonStringifiedQuery = JSON.stringify({ query });
-
-		const response = await fetch(DIRECTORY_GRAPHQL_ENDPOINT, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: jsonStringifiedQuery
-		});
-
-		if (!response.ok) {
-			return json({
-				error:
-					'Failed to fetch from Directory API,  status: ' +
-					response.status +
-					', URL' +
-					DIRECTORY_GRAPHQL_ENDPOINT +
-					', jsonStringifiedQuery: ' +
-					jsonStringifiedQuery
-			});
+		const astParam = url.searchParams.get('ast');
+		let graphqlFilter = '';
+		if (astParam) {
+			const ast = JSON.parse(astParam);
+			graphqlFilter = astToGraphqlFilter(ast);
 		}
 
-		const result = await response.json();
-		const count = result?.data?.Biobanks_agg.count ?? 0;
+		console.log('GET: graphqlFilter: ', graphqlFilter);
+
+		const query = buildGraphqlQuery('Biobanks_agg', graphqlFilter, ['count']);
+
+		console.log('GET: the value of query: ', query);
+
+		const data = await runGraphqlQuery(query);
+
+		const count = data?.Biobanks_agg.count ?? 0;
+		console.log('GET: count: ', count);
 		if (count != null) {
 			return json({ count });
 		}
 
+		console.error('Failed to fetch count from Directory API, data: ', data);
 		return json({ error: 'Unknown error' });
 	} catch (error) {
-		return json({ error: 'Unexpected server error' }, { status: 500 });
+		return json({ error: `Unexpected server error ${error}, status: 500` });
 	}
-}
+};

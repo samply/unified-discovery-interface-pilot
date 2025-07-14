@@ -5,6 +5,7 @@
 	import Linker from './Linker.svelte';
 	import AiSearchField from './AiSearchField.svelte';
 	import { buildDirectoryUrlFromAst } from '$lib/utils/ast-to-directory-url';
+	import DirectoryBiobankList from './DirectoryBiobankList.svelte';
 
 	// If a results table cell contains "-1", it means that the cell is empty,
 	// so we replace it with "-". This is done inside the shadow DOM of the
@@ -87,23 +88,46 @@
 
 	// Code to get stuff from the Directory
 	let directoryBiobankCount: number | null = null;
+	let directoryBiobankList: [] | null = null;
 	// Fetch Directory biobank count from the server-side endpoint
-	const fetchDirectoryBiobankCount = async () => {
+	const fetchDirectoryBiobankInformation = async (event) => {
 		try {
-			const res = await fetch('/api/directory-biobank-count');
-			const data = await res.json();
+			const { ast } = event.detail;
+			const astParam = encodeURIComponent(JSON.stringify(ast));
 
-			if (res.ok) {
-				directoryBiobankCount = data.count;
+			const countResult = await fetch(`/api/directory-biobank-count?ast=${astParam}`);
+			const countData = await countResult.json();
+			if (countResult.ok) {
+				directoryBiobankCount = countData.count;
 			} else {
 				let error = 'Unknown error';
-				if (data.error) {
-					error = data.error;
+				if (countData.error) {
+					error = countData.error;
+				}
+				console.error('fetchDirectoryBiobankCount: error: ', error);
+			}
+
+			const listResult = await fetch(`/api/directory-biobank-list?ast=${astParam}`);
+			const listData = await listResult.json();
+			if (listResult.ok) {
+				directoryBiobankList = listData.Biobanks;
+				// console.log('fetchDirectoryBiobankInformation: listData: ', listData);
+				// console.log('fetchDirectoryBiobankInformation: directoryBiobankList: ', directoryBiobankList);
+
+				let name = directoryBiobankList[0].name;
+				let url = directoryBiobankList[0].url;
+
+				console.log('fetchDirectoryBiobankInformation: name: ', name);
+				console.log('fetchDirectoryBiobankInformation: url: ', url);
+			} else {
+				let error = 'Unknown error';
+				if (listData.error) {
+					error = listData.error;
 				}
 				console.error('fetchDirectoryBiobankCount: error: ', error);
 			}
 		} catch (e) {
-			console.error('Failed to fetch organization count, error: ', e);
+			console.error('Failed to fetch organization information, error: ', e);
 		}
 	};
 
@@ -122,7 +146,7 @@
 			updateSearchFieldUrls(e);
 
 			// Get Directory-related information
-			fetchDirectoryBiobankCount();
+			fetchDirectoryBiobankInformation(e);
 		});
 	}
 </script>
@@ -181,7 +205,7 @@
 					sampleCount={directoryBiobankCount}
 					browseLink={directoryUrl}
 				>
-					<img src="/DirectoryMock.png" alt="Directory" />
+					<DirectoryBiobankList {directoryBiobankList} />
 				</Linker>
 			</div>
 			<div class="chart-wrapper chart-double-width">
