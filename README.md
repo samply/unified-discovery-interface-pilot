@@ -1,7 +1,12 @@
-# Lens2 Beacon UI
+# Unified Discovery Interface pilot
 
-This fork of the Lens2 project provides Beacon search functionality
----
+This fork of the Lens2 project provides functionality that allows search both in
+the Directory and in the BBMRI Locator.
+
+It also gives the user the possibility to enter search terms in free text, rather
+than needing to come to terms with the complexity of the GUI. The typed text
+is passed to a locally-running AI (Mistral) which turns it into suitably formatted
+JSON, which is then used to select the appropriate search terms.
 
 ## Implementation Guide 
 
