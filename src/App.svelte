@@ -95,6 +95,7 @@
 			const { ast } = event.detail;
 			const astParam = encodeURIComponent(JSON.stringify(ast));
 
+			// Get the number of matching biobanks
 			const countResult = await fetch(`/api/directory-biobank-count?ast=${astParam}`);
 			const countData = await countResult.json();
 			if (countResult.ok) {
@@ -104,9 +105,13 @@
 				if (countData.error) {
 					error = countData.error;
 				}
-				console.error('fetchDirectoryBiobankCount: error: ', error);
+				console.error(
+					'fetchDirectoryBiobankCount: error when getting biobank count from Directory: ',
+					error
+				);
 			}
 
+			// Get a full list of matching biobanks
 			const listResult = await fetch(`/api/directory-biobank-list?ast=${astParam}`);
 			const listData = await listResult.json();
 			if (listResult.ok) {
@@ -114,17 +119,23 @@
 				// console.log('fetchDirectoryBiobankInformation: listData: ', listData);
 				// console.log('fetchDirectoryBiobankInformation: directoryBiobankList: ', directoryBiobankList);
 
-				let name = directoryBiobankList[0].name;
-				let url = directoryBiobankList[0].url;
+				// Get first biobank, if the list is not empty
+				if (directoryBiobankList && directoryBiobankList.length === 0) {
+					let name = directoryBiobankList[0].name;
+					let url = directoryBiobankList[0].url;
 
-				console.log('fetchDirectoryBiobankInformation: name: ', name);
-				console.log('fetchDirectoryBiobankInformation: url: ', url);
+					console.log('fetchDirectoryBiobankInformation: name: ', name);
+					console.log('fetchDirectoryBiobankInformation: url: ', url);
+				}
 			} else {
 				let error = 'Unknown error';
 				if (listData.error) {
 					error = listData.error;
 				}
-				console.error('fetchDirectoryBiobankCount: error: ', error);
+				console.error(
+					'fetchDirectoryBiobankCount: error when getting biobank list from Directory: ',
+					error
+				);
 			}
 		} catch (e) {
 			console.error('Failed to fetch organization information, error: ', e);

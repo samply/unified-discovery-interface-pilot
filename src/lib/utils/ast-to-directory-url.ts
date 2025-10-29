@@ -6,13 +6,12 @@ export function buildDirectoryUrlFromAst(ast: AstElement, baseUrl: string): stri
 	return `${baseUrl.replace(/\/+$/, '')}?${queryString}`;
 }
 
-// Mapping from AST keys to query parameter names
+// Mapping from AST keys to Directory query parameter names
 const keyMap: Record<string, string> = {
 	country: 'Countries',
 	'collection-type': 'Collectiontype',
 	category: 'Categories',
 	'service-type': 'Servicestype'
-	// Add more mappings here as needed
 };
 
 // Converts the AST to a flat record of query parameters

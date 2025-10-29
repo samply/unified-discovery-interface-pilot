@@ -31,8 +31,8 @@
                     },
                     {
                         "key": "CZ",
-                        "name": "Czechoslovakia",
-                        "description": "Czechoslovakia"
+                        "name": "Czech Republic",
+                        "description": "Czech Republic"
                     }
                 ]
             },
@@ -47,22 +47,22 @@
                 ],
                 "criteria": [
                     {
-                        "key": "hospital",
+                        "key": "HOSPITAL",
                         "name": "Hospital",
                         "description": "Hospital"
                     },
                     {
-                        "key": "image-collection",
+                        "key": "IMAGE",
                         "name": "Image collection",
                         "description": "Image collection"
                     },
                     {
-                        "key": "longitudinal",
+                        "key": "LONGITUDINAL",
                         "name": "Longitudinal",
                         "description": "Longitudinal"
                     },
                     {
-                        "key": "non-human",
+                        "key": "NON_HUMAN",
                         "name": "Non-human",
                         "description": "Non-human"
                     }
@@ -79,22 +79,22 @@
                 ],
                 "criteria": [
                     {
-                        "key": "autoimmune-disease",
+                        "key": "autoimmune",
                         "name": "Autoimmune disease",
                         "description": "Autoimmune disease"
                     },
                     {
-                        "key": "cardiovascular-disease",
+                        "key": "cardiovascular",
                         "name": "Cardiovascular disease",
                         "description": "Cardiovascular disease"
                     },
                     {
-                        "key": "covid-19",
+                        "key": "covid19",
                         "name": "Covid-19",
                         "description": "Covid-19"
                     },
                     {
-                        "key": "infectious-diseases",
+                        "key": "infectious",
                         "name": "Infectious diseases",
                         "description": "Infectious diseases"
                     }
@@ -121,12 +121,12 @@
                         "description": "Data analysis"
                     },
                     {
-                        "key": "certification-programs",
+                        "key": "CertificationPrograms",
                         "name": "Certification programs",
                         "description": "Certification programs"
                     },
                     {
-                        "key": "diagnostic-imaging-service",
+                        "key": "Diagnostic-Imaging-Service",
                         "name": "Diagnostic imaging service",
                         "description": "Diagnostic imaging service"
                     }

@@ -24,16 +24,16 @@ export const GET: RequestHandler = async ({ url }) => {
 			graphqlFilter = astToGraphqlFilter(ast);
 		}
 
-		console.log('GET: graphqlFilter: ', graphqlFilter);
+		console.log('GET count: graphqlFilter: ', graphqlFilter);
 
 		const query = buildGraphqlQuery('Biobanks_agg', graphqlFilter, ['count']);
 
-		console.log('GET: the value of query: ', query);
+		console.log('GET count: the value of query: ', query);
 
 		const data = await runGraphqlQuery(query);
 
 		const count = data?.Biobanks_agg.count ?? 0;
-		console.log('GET: count: ', count);
+		console.log('GET count: count: ', count);
 		if (count != null) {
 			return json({ count });
 		}
@@ -41,6 +41,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		console.error('Failed to fetch count from Directory API, data: ', data);
 		return json({ error: 'Unknown error' });
 	} catch (error) {
+		console.error({ error: `Unexpected server error ${error}, status: 500` });
 		return json({ error: `Unexpected server error ${error}, status: 500` });
 	}
 };

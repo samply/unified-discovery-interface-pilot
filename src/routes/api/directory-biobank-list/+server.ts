@@ -14,15 +14,15 @@ export const GET: RequestHandler = async ({ url }) => {
 			graphqlFilter = astToGraphqlFilter(ast);
 		}
 
-		console.log('GET: graphqlFilter: ', graphqlFilter);
+		console.log('GET list: graphqlFilter: ', graphqlFilter);
 
 		const query = buildGraphqlQuery('Biobanks', graphqlFilter, ['id', 'name', 'url']);
 
-		console.log('GET: the value of query: ', query);
+		console.log('GET list: the value of query: ', query);
 
 		const data = await runGraphqlQuery(query);
 
-		console.log('GET: data: ', data);
+		console.log('GET list: data: ', data);
 
 		return json(data);
 	} catch (error) {

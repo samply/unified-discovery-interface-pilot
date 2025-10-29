@@ -12,7 +12,7 @@ COPY ./tests ./tests
 COPY ./tsconfig.json ./tsconfig.json
 COPY ./vite.config.ts ./vite.config.ts
 
-RUN npm install vite --save-dev
+RUN npm install vite --save-dev --loglevel=verbose
 
 RUN VITE_TARGET_ENVIRONMENT=${TARGET_ENVIRONMENT} npm run build
 

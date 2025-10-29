@@ -5,7 +5,7 @@ import type { AstElement, AstTopLayer, AstBottomLayerValue } from '@samply/lens'
  *
  * This function takes an AST element, e.g. the result of the `parse` function
  * from `@samply/lens/ast`, and converts it into a valid GraphQL filter string,
- * which can be used with the Samply.MDS GraphQL API.
+ * which can be used with the Directory GraphQL API.
  *
  * The returned string is a valid GraphQL filter, and can be used directly in a
  * GraphQL query.
@@ -58,10 +58,10 @@ import { json } from '@sveltejs/kit';
 const DIRECTORY_GRAPHQL_ENDPOINT = 'https://directory.bbmri-eric.eu/ERIC/api/graphql';
 
 /**
- * Sends a GraphQL query to the Samply.MDS Directory API and returns the result.
+ * Sends a GraphQL query to the Directory API and returns the result.
  *
  * Given a valid GraphQL query string, this function sends a POST request to the
- * Samply.MDS Directory API and returns the result as a JSON object.
+ * Directory API and returns the result as a JSON object.
  *
  * If the request is unsuccessful, or if the response is not a valid JSON object,
  * an error message is returned in JSON format.
@@ -115,6 +115,19 @@ export async function runGraphqlQuery(query: string) {
 	}
 }
 
+/**
+ * Recursively converts an AST node into a GraphQL filter fragment.
+ *
+ * - For non-leaf nodes (nodes with `children`), it processes each child and:
+ *   - returns an empty string if no child produced a filter,
+ *   - returns the single child's filter if exactly one child produced a filter,
+ *   - otherwise wraps multiple child filters in the corresponding GraphQL logical
+ *     operand (e.g., `and: [ ... ]`, `or: [ ... ]`).
+ * - For leaf nodes, delegates to {@link leafToFilter}.
+ *
+ * @param node - Any AST element (either a top-level node with `children` or a leaf).
+ * @returns A GraphQL filter fragment string, or an empty string if nothing applies.
+ */
 function processAstNode(node: AstElement): string {
 	if ('children' in node) {
 		const childFilters = node.children.map(processAstNode).filter(Boolean);
@@ -133,20 +146,53 @@ function processAstNode(node: AstElement): string {
 	}
 }
 
+/**
+ * Converts a leaf AST value into a GraphQL filter fragment.
+ *
+ * Currently supports only the `EQUALS` operation by mapping it to something like:
+ * `{ <key>: { name: { equals: <value> } } }`
+ *
+ * Notes:
+ * - String values are automatically quoted; non-strings are stringified via `JSON.stringify`.
+ * - Non-supported operations yield an empty string.
+ *
+ * @param leaf - A bottom-layer AST value with `key`, `type`, and `value`.
+ * @returns A GraphQL filter fragment string for supported operations, otherwise an empty string.
+ *
+ * @example
+ * // Produces: country: { name: { equals: "UK" } }
+ * leafToFilter({ key: 'country', type: 'EQUALS', value: 'UK' });
+ */
 function leafToFilter(leaf: AstBottomLayerValue): string {
 	const { key, type, value } = leaf;
 
-	// Handle EQUALS only for now
+	// Handle just the AST EQUALS for now
 	if (type === 'EQUALS') {
 		const formattedValue =
 			typeof value === 'string' ? `"${value}"` : JSON.stringify(value);
-		return `${key}: { name: {equals: ${formattedValue} } }`;
+		let filter = `${key}: { name: {equals: ${formattedValue} } }`; // default generic filter. E.g. key = "country".
+		// Build specialized filters, depending on AST key.
+		if (key === `collection-type`)
+			filter = `collections: { type: { name: {equals: ${formattedValue} } } }`;
+		else if (key === `category`)
+			filter = `collections: { categories: { name: {equals: ${formattedValue} } } }`;
+		else if (key === `service-type`)
+			filter = `services: { serviceTypes: { name: {equals: ${formattedValue} } } }`;
+		return filter;
 	}
 
-	// You can add more operations (e.g., RANGE, CONTAINS) here
+	// Any other AST types will be silently ignored
 	return '';
 }
 
+/**
+ * Maps a high-level AST logical operand to its GraphQL key.
+ *
+ * The function provides a safe fallback to `and` for unknown operands.
+ *
+ * @param op - One of the supported top-layer operands (`AND`, `OR`, `XOR`, `NOT`).
+ * @returns The corresponding GraphQL key (`and`, `or`, `xor`, `not`), or `and` by default.
+ */
 function operandToGraphQLKey(op: AstTopLayer['operand']): string {
 	switch (op) {
 		case 'AND':

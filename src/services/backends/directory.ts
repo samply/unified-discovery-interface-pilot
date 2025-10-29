@@ -22,22 +22,10 @@ export class Directory {
 		updateResponse: (response: ResponseStore) => void,
 		controller: AbortController
 	): Promise<void> {
-		console.log(
-			'Directory.send: query: ' +
-				query +
-				' updateResponse: ' +
-				updateResponse +
-				' controller: ' +
-				controller
-		);
-		console.log(
-			'Directory.send: this.url: ' +
-				this.url +
-				' this.sites: ' +
-				this.sites +
-				' this.currentTask: ' +
-				this.currentTask
-		);
+		console.log('Directory.send: this function is probably a dummy');
+
+		// Keep eslint happy
+		console.debug(query, updateResponse, controller);
 
 		// Convert query to a suitable intermediate format for relaying to Directory
 
