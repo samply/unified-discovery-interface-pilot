@@ -20,7 +20,7 @@
 				console.log('Age at Diagnosis:', aiQueryResult.getAgeAtDiagnosis());
 				console.log('Date of Diagnosis:', aiQueryResult.getDateOfDiagnosis());
 				console.log('Sampling Date:', aiQueryResult.getSamplingDate());
-				console.log('Patient Age:', aiQueryResult.getPatientAge());
+				console.log('Donor Age:', aiQueryResult.getDonorAge());
 				console.log('Sample Type:', aiQueryResult.getSampleType());
 				console.log('Storage Temperature:', aiQueryResult.getSampleStorageTemperature());
 				console.log('Country:', aiQueryResult.getCountry());
@@ -39,7 +39,7 @@
 					searchTextWordCount
 				);
 				AddItems.ageAtDiagnosis(aiQueryResult.getAgeAtDiagnosis());
-				AddItems.patientAge(aiQueryResult.getPatientAge());
+				AddItems.donorAge(aiQueryResult.getDonorAge());
 				AddItems.dateOfDiagnosis(aiQueryResult.getDateOfDiagnosis());
 				AddItems.samplingDate(aiQueryResult.getSamplingDate());
 				AddItems.country(aiQueryResult.getCountry(), searchTextWordCount);

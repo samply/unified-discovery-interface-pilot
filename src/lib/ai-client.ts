@@ -8,7 +8,7 @@ const staticPromptParts = [
 	'diagnosis (convert named diagnoses into a list of ICD-10 codes like A02 or C45.1),',
 	'age_at_diagnosis (a map, with explicit lower and upper values),',
 	'date_of_diagnosis (a map, with explicit lower and upper values),',
-	'patient_age (a map, with explicit lower and upper values),',
+	'donor_age (a map, with explicit lower and upper values),',
 	'sample_type (a list containing zero or more of the following: blood-serum, tissue-frozen, whole-blood, blood-plasma, derivative-other, tissue-other, peripheral-blood-cells-vital, urine, rna, liquid-other, buffy-coat, dna, csf-liquor, stool-faeces, bone-marrow, tissue-ffpe, saliva, ascites, swab, dried-whole-blood),',
 	'sampling_date (a map, with explicit lower and upper values),',
 	'sample_storage_temperature (a list),',

@@ -79,7 +79,9 @@
 	let directoryUrl = directoryBaseUrl;
 	function updateSearchFieldUrls(event) {
 		const query = dataPasser.getQueryAPI();
-		const encodedQuery = btoa(JSON.stringify(query));
+		const stringifiedQuery = JSON.stringify(query);
+		console.log("updateSearchFieldUrls: stringifiedQuery: " + stringifiedQuery);
+		const encodedQuery = btoa(stringifiedQuery);
 		locatorUrl = `${locatorBaseUrl}?query=${encodedQuery}`;
 
 		const { ast } = event.detail;

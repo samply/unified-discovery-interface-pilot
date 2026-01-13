@@ -57,7 +57,7 @@ export class AiQueryResult {
 		public readonly diagnosis: string[],
 		public readonly age_at_diagnosis: AgeRange,
 		public readonly date_of_diagnosis: DateRange,
-		public readonly patient_age: AgeRange,
+		public readonly donor_age: AgeRange,
 		public readonly sample_type: string[],
 		public readonly sampling_date: DateRange,
 		public readonly sample_storage_temperature: string[],
@@ -75,7 +75,7 @@ export class AiQueryResult {
 			obj.diagnosis,
 			obj.age_at_diagnosis,
 			obj.date_of_diagnosis,
-			obj.patient_age,
+			obj.donor_age,
 			obj.sample_type,
 			obj.sampling_date,
 			obj.sample_storage_temperature,
@@ -186,6 +186,7 @@ export class AiQueryResult {
 				return null;
 			}
 			raw = this.gender[0].trim().toLowerCase();
+			console.info('Gender field is an array, using first element: ', raw);
 		} else {
 			raw = this.gender.trim().toLowerCase();
 		}
@@ -456,33 +457,33 @@ export class AiQueryResult {
 	}
 
 	/**
-	 * Retrieves the age range from the "patient_age" field.
+	 * Retrieves the age range from the "donor_age" field.
 	 * Returns null if the age range is invalid or missing.
 	 * If the age range is valid, returns an object with
 	 * "lower" and "upper" properties, each holding the
 	 * respective age value (or null if not applicable).
 	 *
-	 * If there is no diagnosis and no patient age range, but a diagnosis age is available,
+	 * If there is no diagnosis and no donor age range, but a diagnosis age is available,
 	 * return that.
 	 *
 	 * @returns {{ lower: number | null; upper: number | null } | null}
 	 */
-	public getPatientAge():
+	public getDonorAge():
 		| { lower: number | null; upper: number | null }
 		| EmptyObject
 		| null {
-		const patientAge = this.parseAgeRange('patient_age');
+		const donorAge = this.parseAgeRange('donor_age');
 		const diagnosisAge = this.parseAgeRange('age_at_diagnosis');
 
 		if (
 			!this.hasDiagnosis() &&
-			this.isEmptyAgeRange(patientAge) &&
+			this.isEmptyAgeRange(donorAge) &&
 			!this.isEmptyAgeRange(diagnosisAge)
 		) {
 			return diagnosisAge;
 		}
 
-		return patientAge;
+		return donorAge;
 	}
 
 	/**
@@ -499,7 +500,7 @@ export class AiQueryResult {
 	 * Retrieves the age range at diagnosis from the "age_at_diagnosis" field.
 	 * Returns null if the age range is invalid or missing. If no diagnosis
 	 * is found, an empty object is returned. If the age at diagnosis matches
-	 * an incomplete patient age value, the age is suppressed as redundant
+	 * an incomplete donor age value, the age is suppressed as redundant
 	 * and an empty object is returned.
 	 *
 	 * @returns {{ lower: number | null; upper: number | null } | {} | null}
@@ -514,25 +515,25 @@ export class AiQueryResult {
 			return {};
 		}
 
-		const patientAge = this.parseAgeRange('patient_age');
+		const donorAge = this.parseAgeRange('donor_age');
 		const diagnosisAge = this.parseAgeRange('age_at_diagnosis');
 
 		// If both age ranges only specify one bound (say, just lower: 60) and they’re the
 		// same, the following block concludes there's no meaningful difference between
 		// “age at diagnosis” and “current patient age,” so it opts to skip one to avoid duplication.
 		if (
-			patientAge &&
+			donorAge &&
 			diagnosisAge &&
-			typeof patientAge === 'object' &&
+			typeof donorAge === 'object' &&
 			typeof diagnosisAge === 'object' &&
-			!(Array.isArray(patientAge) || Array.isArray(diagnosisAge))
+			!(Array.isArray(donorAge) || Array.isArray(diagnosisAge))
 		) {
-			// Extract the non-null component of patient age
+			// Extract the non-null component of donor age
 			const patientNonNull =
-				patientAge.lower !== null && patientAge.upper === null
-					? patientAge.lower
-					: patientAge.upper !== null && patientAge.lower === null
-						? patientAge.upper
+				donorAge.lower !== null && donorAge.upper === null
+					? donorAge.lower
+					: donorAge.upper !== null && donorAge.lower === null
+						? donorAge.upper
 						: null;
 
 			const diagnosisNonNull =
@@ -548,7 +549,7 @@ export class AiQueryResult {
 				patientNonNull === diagnosisNonNull
 			) {
 				console.info(
-					'Age at diagnosis matches incomplete patient age value — suppressing as redundant.'
+					'Age at diagnosis matches incomplete donor age value — suppressing as redundant.'
 				);
 				return {};
 			}

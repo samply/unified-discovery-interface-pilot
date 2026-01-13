@@ -60,8 +60,8 @@ export class AddItems {
 		this.numericRange(item, 'diagnosis_age_donor', 'Diagnosis age donor (years)');
 	}
 
-	static patientAge(item: NumericRange | EmptyObject | null): void {
-		this.numericRange(item, 'patient_age', 'Patient age (years)');
+	static donorAge(item: NumericRange | EmptyObject | null): void {
+		this.numericRange(item, 'donor_age', 'Donor age');
 	}
 
 	static dateOfDiagnosis(item: DateRange | EmptyObject | null): void {
