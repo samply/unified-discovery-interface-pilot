@@ -80,7 +80,7 @@
 	function updateSearchFieldUrls(event) {
 		const query = dataPasser.getQueryAPI();
 		const stringifiedQuery = JSON.stringify(query);
-		console.log("updateSearchFieldUrls: stringifiedQuery: " + stringifiedQuery);
+		console.log('updateSearchFieldUrls: stringifiedQuery: ' + stringifiedQuery);
 		const encodedQuery = btoa(stringifiedQuery);
 		locatorUrl = `${locatorBaseUrl}?query=${encodedQuery}`;
 
@@ -236,12 +236,12 @@
 						yAxisTitle="Number of patients"
 					></lens-chart>
 					<lens-chart
-						title="Age Distribution"
-						catalogueGroupCode="age_at_diagnosis"
+						title="Sample Type"
+						catalogueGroupCode="sample_kind"
 						chartType="bar"
 						displayLegends={true}
-						groupRange={10}
-						filterRegex="^(1*[12]*[0-9])"
+						xAxisTitle="Type"
+						yAxisTitle="Number of patients"
 					></lens-chart>
 				</Linker>
 			</div>
