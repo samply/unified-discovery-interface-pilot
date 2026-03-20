@@ -8,18 +8,7 @@
     "siteMappings": {
         "udi": "UDI",
         "udi-test": "UDI-Test",
-        "stockholm": "Stockholm",
-        "athens": "Athens",
-        "bucharest": "Bucharest",
-        "CafeVariome": "CafeVariome",
-        "EGA Cineca": "EGA Cineca",
-        "GDI Starter Kit, firewalled": "GDI Starter Kit, firewalled",
-        "GDI Starter Kit": "GDI Starter Kit",
-        "HD Cineca firewalled": "HD Cineca firewalled",
-        "HD Cineca": "HD Cineca",
-        "Molgenis mutations": "Molgenis mutations",
-        "Progenetix": "Progenetix",
-        "RDConnect playground": "RDConnect playground"
+        "training-udi-test": "Training-UDI-Test"
     },
     "catalogueKeyToResponseKeyMap": [
         [

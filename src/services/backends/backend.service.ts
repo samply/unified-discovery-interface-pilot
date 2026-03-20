@@ -52,23 +52,29 @@ export const requestBackend = (
 	if (env.PUBLIC_ENVIRONMENT === 'test') {
 		spotUrl = 'http://localhost/';
 		directoryUrl = 'http://localhost:8080/';
-		locatorSiteList = ['udi-test'];
+		locatorSiteList = ['udi-test', 'training-udi-test'];
 		directorySiteList = [];
 	} else if (env.PUBLIC_ENVIRONMENT === 'acceptance') {
 		spotUrl = 'http://localhost/';
 		directoryUrl = 'http://localhost:8080/';
-		locatorSiteList = ['udi-test'];
+		locatorSiteList = ['udi-test', 'training-udi-test'];
 		directorySiteList = [];
 	} else {
 		// production
 		spotUrl = 'http://localhost/';
 		directoryUrl = 'http://localhost:8080/';
 		directorySiteList = [];
-		locatorSiteList = ['udi-test'];
+		locatorSiteList = ['udi-test', 'training-udi-test'];
 	}
+
+	console.log('requestBackend: env.PUBLIC_BACKEND_URL', env.PUBLIC_BACKEND_URL);
+
 	if (env.PUBLIC_BACKEND_URL) {
 		spotUrl = env.PUBLIC_BACKEND_URL;
 	}
+
+	console.log('requestBackend: spotUrl', spotUrl);
+
 	const spot = new Spot(new URL(spotUrl), locatorSiteList, queryId);
 	spot.send(btoa(decodeURI(JSON.stringify(spotQuery))), updateResponse, abortController);
 	const directory = new Directory(new URL(directoryUrl), directorySiteList, queryId);

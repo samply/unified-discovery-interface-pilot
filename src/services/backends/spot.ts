@@ -24,6 +24,8 @@ export class Spot {
 		controller: AbortController
 	): Promise<void> {
 		try {
+			console.log('Spot.send: this.url: ', this.url);
+			
 			const beamTaskResponse = await fetch(
 				`${this.url}beam?sites=${this.sites.toString()}`,
 				{

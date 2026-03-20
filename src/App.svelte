@@ -149,6 +149,8 @@
 		window.addEventListener('emit-lens-query', (e) => {
 			if (!dataPasser) return;
 
+			console.log('App: Search button clicked');
+
 			const event = e as CustomEvent;
 			const { ast, updateResponse, abortController } = event.detail;
 			const criteria: string[] = dataPasser.getCriteriaAPI('diagnosis');
