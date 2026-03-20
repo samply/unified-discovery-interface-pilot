@@ -54,17 +54,23 @@ export const requestBackend = (
 		directoryUrl = 'http://localhost:8080/';
 		locatorSiteList = ['udi-test', 'training-udi-test'];
 		directorySiteList = [];
+
+		console.log('requestBackend: test environment');
 	} else if (env.PUBLIC_ENVIRONMENT === 'acceptance') {
 		spotUrl = 'http://localhost/';
 		directoryUrl = 'http://localhost:8080/';
 		locatorSiteList = ['udi-test', 'training-udi-test'];
 		directorySiteList = [];
+
+		console.log('requestBackend: acceptance environment');
 	} else {
 		// production
 		spotUrl = 'http://localhost/';
 		directoryUrl = 'http://localhost:8080/';
 		directorySiteList = [];
 		locatorSiteList = ['udi-test', 'training-udi-test'];
+
+		console.log('requestBackend: production environment');
 	}
 
 	console.log('requestBackend: env.PUBLIC_BACKEND_URL', env.PUBLIC_BACKEND_URL);
