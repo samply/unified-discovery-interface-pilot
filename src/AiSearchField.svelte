@@ -12,7 +12,7 @@
 			if (searchText.trim() === '') return;
 
 			loading = true;
-			let aiQueryResult: AiQueryResult | null = await queryAi(searchText, 0);
+			let aiQueryResult: AiQueryResult | null = await queryAi(searchText);
 			if (aiQueryResult) {
 				console.log('Query result:', aiQueryResult);
 				console.log('Gender:', aiQueryResult.getGender());

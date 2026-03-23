@@ -1,60 +1,28 @@
-import { env } from '$env/dynamic/public';
 import { AiQueryResult } from '$lib/types/ai-query-result';
 
-const staticPromptParts = [
-	'You are an expert in Biobanks and patient data.',
-	'You can analyze queries in free text and generate JSON with the following elements:',
-	'gender (a simple string),',
-	'diagnosis (convert named diagnoses into a list of ICD-10 codes like A02 or C45.1),',
-	'age_at_diagnosis (a map, with explicit lower and upper values),',
-	'date_of_diagnosis (a map, with explicit lower and upper values),',
-	'donor_age (a map, with explicit lower and upper values),',
-	'sample_type (a list containing zero or more of the following: blood-serum, tissue-frozen, whole-blood, blood-plasma, derivative-other, tissue-other, peripheral-blood-cells-vital, urine, rna, liquid-other, buffy-coat, dna, csf-liquor, stool-faeces, bone-marrow, tissue-ffpe, saliva, ascites, swab, dried-whole-blood),',
-	'sampling_date (a map, with explicit lower and upper values),',
-	'sample_storage_temperature (a list),',
-	'country (a list of two letter country codes, e.g. DE),',
-	'collection_type (a list containing zero or more of the following: BIRTH_COHORT, CASE_CONTROL, COHORT, CROSS_SECTIONAL, DISEASE_SPECIFIC, IMAGE, HOSPITAL, LONGITUDINAL, NON_HUMAN, POPULATION_BASED, TWIN_STUDY),',
-	'category (a list containing zero or more of the following: autoimmune,cardiovascular,covid19,infectious,metabolic,nervous_system,oncology,paediatrics,population,rare_disease),',
-	'service_type (a list containing zero or more of the following: ai-consulting,algorithm-design,animal-model-development,assay-development,BehavioralScience,BigDataManagement,Bioimage-analysis,biomarker-discovery,biostatistic-services,BrainNeurologicalResearch,CancerResearch,cell-line-development,CertificationPrograms,clinical-chemistry-services,CollaborationNetworkingMulticentricStudies,ComputingServices,ConsultationProtocolDevelopment,data-analysis,Diagnostic-Imaging-Service,EpidemiologyInfectiousDiseaseResearch,ethics-proposal-review,functional-and-system-analytics,genomic-annotation,genomics-analysis,Histology-Tissue-Analysis,informed-consent-management,lipidomics-analysis,Live-Cell-Imaging,metabolomics-analysis,microbiome-analysis,MicrobiomeStudies,Microscopy-Techniques,MRI-CT-Imaging,nucleic-acid-extraction,otherBiobankingElsiServices,otherBioinformaticsDataScienceServices,otherConsultingTrainingEducationServices,otherPathologyImagingServices,OtherResearchDomains,otherSampleBioanalyticalServices,PathologySupport,PediatricResearch,peptide-carbohydrate-lipid-analytics,PET-Scans,pharmacokinetic-pharmacodynamic-services,protein-analytics,protein-purification,proteomics-analysis,RareDiseaseResearch,sample-collection,sample-data-management,sample-processing,sample-quality-control,sample-storage,ScientificAdvisoryClinicalStudies,sequencing,software-development,StrategicPlanningforClinicalStudies,tissue-culture,toxicology-testing,TrainingResourceLabProtocols,transcriptomics-analysis),',
-	'Please convert the following text into JSON:'
-];
-
-const staticPrompt = staticPromptParts.join(' ');
-
-export async function queryAi(
-	searchText: string,
-	tryCount: number
-): Promise<AiQueryResult | null> {
+export async function queryAi(searchText: string): Promise<AiQueryResult | null> {
 	try {
-		const response = await fetch('http://localhost:11434/api/generate', {
+		const response = await fetch('/api/ai-query', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				model: 'mistral',
-				prompt: staticPrompt + searchText,
-				stream: false
-			})
+			body: JSON.stringify({ searchText })
 		});
 
-		const data = await response.json();
-		const jsonString = cleanResponse(data.response);
-		let maxAiTries = 3;
-		if (env.PUBLIC_AI_MAX_TRIES) {
-			maxAiTries = Number(env.PUBLIC_AI_MAX_TRIES);
-		}
-		if (!jsonString) {
-			if (tryCount < maxAiTries) {
-				console.error('Error querying Mistral, trying again');
-				return await queryAi(searchText, tryCount + 1);
-			}
-			// End recursion, don't try any more.
-			console.error('Too many attempts to query Mistral, giving up');
+		if (!response.ok) {
+			console.error('AI route failed:', response.status);
 			return null;
 		}
-		const parsed: AiQueryResult = AiQueryResult.fromJson(jsonString);
-		return parsed;
+
+		const data = await response.json();
+		const jsonString = cleanResponse(data.raw);
+
+		if (!jsonString) {
+			return null;
+		}
+
+		return AiQueryResult.fromJson(jsonString);
 	} catch (error) {
-		console.error('Error querying Mistral:', error);
+		console.error('Error querying AI route:', error);
 		return null;
 	}
 }
